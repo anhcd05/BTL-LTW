@@ -1,0 +1,24 @@
+sequenceDiagram
+    actor U as Người dùng
+    participant W as Trang Gợi ý (web)
+    participant A as API
+    participant E as Bộ gợi ý (recommendation-ai)
+    participant DB as Cơ sở dữ liệu
+    U->>W: Mở trang /recommendations
+    W->>A: GET /api/v1/recommendations/shelves
+    A->>A: throttle reco:userId (30 lần)
+    A->>E: recommendationShelves(db, userId)
+    E->>DB: Đọc recommendation_models (active)
+    alt Không có model / track_embeddings rỗng / < 3 tương tác
+        E-->>A: null (NO_MODEL · NO_EMBEDDINGS · FEW_INTERACTIONS)
+        A->>DB: userRecommendationSelection (luật SQL cũ)
+        A-->>W: 1 kệ FOR_YOU, impressionToken = null
+    else Đủ điều kiện hybrid
+        E->>DB: Tầng 1 lấy ứng viên: CF item-item (50), content e5 (50), follow (25), trending (25), explore (20)
+        E->>E: Tầng 2 buildFeatures (8 đặc trưng) → scoreFeatures (hồi quy logistic)
+        E->>E: Tầng 3 rerank: ≤1 bài/nghệ sĩ, bỏ bài đã thích, nghe 14 ngày, vừa bỏ qua, ô 5 khám phá
+        E-->>A: shelves FOR_YOU, LISTENED, FOLLOW, TRENDING + requestId, modelVersion
+        A->>A: hydrate bài công khai, ký impressionToken (HMAC, JWT_SECRET)
+        A-->>W: 200 { requestId, modelVersion, impressionToken, shelves }
+    end
+    W-->>U: Hiển thị các kệ kèm lý do gợi ý

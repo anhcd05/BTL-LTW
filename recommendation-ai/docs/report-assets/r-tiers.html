@@ -1,0 +1,34 @@
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="common.css"><style>
+.row{display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr;gap:0;align-items:stretch}
+.col{display:flex;flex-direction:column;gap:10px}
+.top{display:flex;gap:14px;align-items:center;justify-content:center;margin-bottom:14px}
+</style></head><body>
+<div class="top"><div class="box" style="border-radius:24px">Yêu cầu <code>GET /recommendations</code> của người dùng đã đăng nhập</div>
+<div class="arrow">→</div><div class="box" style="border-style:dashed">Thiếu model, thiếu embedding, dưới 3 tương tác hoặc lỗi<br/>⇒ dùng luật SQL cũ (fallback)</div></div>
+<div class="row">
+ <div class="grp col"><h3>Tầng 1 · Sinh ứng viên (≤ 150)</h3>
+  <div class="box">Lọc cộng tác item-item<br/><span class="small">đồng xuất hiện với 50 bài gần nhất · 50 bài</span></div>
+  <div class="box">Nội dung (semantic)<br/><span class="small">cosine(vector gu, embedding e5) · 50 bài</span></div>
+  <div class="box">Nghệ sĩ đang theo dõi<br/><span class="small">bài mới nhất và nghe nhiều nhất · 25 bài</span></div>
+  <div class="box">Thịnh hành<br/><span class="small">số người nghe khác nhau trong 7 ngày · 25 bài</span></div>
+  <div class="box">Kho khám phá<br/><span class="small">chưa nghe, ít được hiển thị trong 30 ngày · 20 bài</span></div>
+ </div>
+ <div class="arrow">→</div>
+ <div class="grp col"><h3>Tầng 2 · Xếp hạng</h3>
+  <div class="box">8 đặc trưng chuẩn hóa về [0, 1]<br/><span class="small">cf_score · content_sim · follows_artist · survey_match · genre_overlap · popularity · recency · skip_rate</span></div>
+  <div class="arrow">↓</div>
+  <div class="box">Hồi quy logistic<br/><b>P(thích | u, j) = σ(b + w·x)</b><br/><span class="small">trọng số đọc từ <code>recommendation_models</code> (active)</span></div>
+ </div>
+ <div class="arrow">→</div>
+ <div class="grp col"><h3>Tầng 3 · Sắp xếp lại theo luật</h3>
+  <div class="box">Loại bài đã thích, bài của chính mình,<br/>bài nghe trong 14 ngày, bài vừa bỏ qua</div>
+  <div class="arrow">↓</div>
+  <div class="box">Sắp theo điểm, tối đa 1 bài mỗi nghệ sĩ</div>
+  <div class="arrow">↓</div>
+  <div class="box">Giữ ô thứ 5 cho bài khám phá</div>
+  <div class="arrow">↓</div>
+  <div class="box">Gắn lý do: “Vì bạn đã nghe X”, “Tương tự X”,<br/>“Nghệ sĩ bạn theo dõi”, “Đang thịnh hành”, “Khám phá”</div>
+ </div>
+</div>
+<div class="top" style="margin-top:14px"><div class="box" style="border-radius:24px">Kết quả: 5 gợi ý (hoặc 4 kệ, mỗi kệ ≤ 10 bài) kèm <code>requestId</code>, <code>modelVersion</code>, <code>impressionToken</code></div></div>
+</body></html>

@@ -1,0 +1,23 @@
+sequenceDiagram
+    participant P as Trình phát (player-provider)
+    participant T as Đo hiển thị (recommendation-telemetry)
+    participant A as API
+    participant DB as Cơ sở dữ liệu
+    Note over T: Thẻ gợi ý hiện ≥ 50% (IntersectionObserver)
+    T->>A: POST /recommendations/impressions {requestId, impressionToken, surface, items}
+    A->>A: Header CSRF, throttle, xác minh HMAC impressionToken (đúng user, requestId)
+    A->>DB: Ghi recommendation_impressions (chỉ bài server đã trả, lý do lấy từ token)
+    T->>A: POST /recommendations/clicks {requestId, trackId, impressionToken}
+    A->>DB: Đánh dấu clicked (bài không có trong token thì bỏ qua)
+    P->>A: GET /tracks/:id/playback
+    A-->>P: URL ký số + listen token (JWT 15 phút, jti, startedAtMs, sourceVersion)
+    P->>A: POST /tracks/:id/engagement {token, event: start} khi media thực sự chạy
+    A->>DB: UPSERT track_engagement starts+1 (chỉ khi startedAtMs mới hơn)
+    alt Rời bài khi chưa đạt min(30s, D/2)
+        P->>A: POST engagement {cùng token, event: skip}
+    else Đã nghe ≥ 0,6·D
+        P->>A: POST engagement {cùng token, event: complete}
+    end
+    A->>A: Server tự tính thời gian = now − startedAtMs, phải ≤ max(15 phút, 2·D)
+    A->>DB: UPDATE track_engagement skips/completes +1 WHERE last_token_id = jti
+    A-->>P: {recorded: true | false (trùng hoặc sai thời gian)}

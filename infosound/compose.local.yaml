@@ -1,0 +1,39 @@
+# Native Docker Desktop/Linux local runtime. Source data and secrets stay private.
+name: infosound-local
+services:
+  init-data:
+    image: infosound/tools:local
+    pull_policy: never
+  gateway:
+    pull_policy: never
+    ports: !override
+      - '127.0.0.1:${APP_HTTP_PORT:-18080}:8080'
+      - '127.0.0.1:3443:8443'
+      - '127.0.0.1:9443:9443'
+    volumes:
+      - type: bind
+        source: ${LOCAL_NGINX_CONFIG:?Use scripts/start-local.ps1 or set the private generated Nginx path}
+        target: /etc/nginx/nginx.conf
+        read_only: true
+  tools:
+    pull_policy: never
+    volumes:
+      - ./scripts/storage-bootstrap.ts:/workspace/scripts/storage-bootstrap.ts:ro
+  web:
+    pull_policy: never
+  api:
+    # Isolate the parser's per-UID process budget from other WSL UID1000 apps.
+    user: '11001:11001'
+    pull_policy: never
+  audio-worker:
+    pull_policy: never
+  background-worker:
+    pull_policy: never
+  postgres:
+    pull_policy: never
+  redis:
+    image: ${LOCAL_REDIS_IMAGE:-redis:7.4.12-alpine}
+    pull_policy: never
+  storage:
+    image: ${LOCAL_STORAGE_IMAGE:-chrislusf/seaweedfs:4.51}
+    pull_policy: never

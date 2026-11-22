@@ -1,0 +1,40 @@
+{
+  "name": "@infosound/recommendation-ai",
+  "version": "0.1.0",
+  "private": true,
+  "exports": {
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "default": "./dist/server.js"
+    },
+    "./features": {
+      "types": "./dist/features.d.ts",
+      "default": "./dist/features.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "server": [
+        "dist/server.d.ts"
+      ],
+      "features": [
+        "dist/features.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "tsc -p tsconfig.json && node --test tests/unit/*.test.cjs"
+  },
+  "dependencies": {
+    "@infosound/database": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "typescript": "5.9.3"
+  }
+}

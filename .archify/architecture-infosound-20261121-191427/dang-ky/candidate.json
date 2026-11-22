@@ -1,0 +1,442 @@
+{
+    "schema_version":  1,
+    "diagram_type":  "sequence",
+    "meta":  {
+                 "title":  "Đăng ký tài khoản bằng mã OTP",
+                 "output":  ".archify/architecture-infosound-20261121-191427/dang-ky/dang-ky.html",
+                 "locale":  "vi",
+                 "quality_profile":  "showcase",
+                 "repository":  {
+                                    "url":  "git@gitlab.com:5pidey/int1434.git",
+                                    "revision":  "74f90f2a07e41bb532d2f31831edb66ab7a6a73c",
+                                    "link_mode":  "local-only"
+                                },
+                 "translations":  {
+                                      "page.title":  "Sơ đồ {title}",
+                                      "diagram.description.architecture":  "Sơ đồ kiến trúc InfoSound.",
+                                      "diagram.description.sequence":  "Sơ đồ tuần tự của InfoSound.",
+                                      "node.focus":  "Xem {label}",
+                                      "node.focus.detail":  "Xem {label}, {detail}",
+                                      "node.context.architecture":  "Thành phần hệ thống",
+                                      "node.context.sequence":  "Thành phần tham gia",
+                                      "legend.title":  "Chú giải",
+                                      "legend.sequence.emphasis":  "Yêu cầu chính",
+                                      "legend.sequence.return":  "Phản hồi",
+                                      "legend.sequence.security":  "Kiểm tra quyền",
+                                      "legend.sequence.dashed":  "Bất đồng bộ",
+                                      "legend.sequence.default":  "Thông điệp",
+                                      "viewer.theme.dark":  "Tối",
+                                      "viewer.theme.light":  "Sáng",
+                                      "viewer.theme.toggle":  "Đổi giao diện sáng/tối",
+                                      "viewer.theme.toggle.title":  "Đổi giao diện (T)",
+                                      "viewer.preset.style":  "Kiểu",
+                                      "viewer.preset.choose":  "Chọn kiểu hiển thị",
+                                      "viewer.preset.classic":  "Cổ điển",
+                                      "viewer.preset.classic.short":  "Cổ điển",
+                                      "viewer.motion.live":  "Động",
+                                      "viewer.motion.still":  "Tĩnh",
+                                      "viewer.motion.pause":  "Dừng chuyển động",
+                                      "viewer.motion.resume":  "Bật chuyển động",
+                                      "viewer.present.present":  "Trình chiếu",
+                                      "viewer.present.exit.label":  "Thoát",
+                                      "viewer.present.enter":  "Bật trình chiếu",
+                                      "viewer.present.enter.title":  "Trình chiếu (F)",
+                                      "viewer.present.exit":  "Thoát trình chiếu",
+                                      "viewer.present.exit.title":  "Thoát trình chiếu (F hoặc Esc)",
+                                      "viewer.export.button":  "Xuất",
+                                      "viewer.export.button.title":  "Xuất sơ đồ (E)",
+                                      "viewer.export.diagram":  "Xuất sơ đồ",
+                                      "viewer.export.menu":  "Xuất",
+                                      "viewer.export.subtitle":  "Chọn định dạng tệp",
+                                      "viewer.export.image":  "Hình ảnh",
+                                      "viewer.export.share":  "Chia sẻ",
+                                      "viewer.export.copyDiagram":  "Sao chép sơ đồ",
+                                      "viewer.export.raster":  "Ảnh raster",
+                                      "viewer.export.lossless":  "Ảnh nén không mất dữ liệu",
+                                      "viewer.export.editable":  "Ảnh vector có thể chỉnh sửa",
+                                      "viewer.export.vectorMotion":  "Vector và chuyển động",
+                                      "viewer.export.vectorMotion.heading":  "Vector và chuyển động",
+                                      "viewer.outline.title":  "Danh mục thành phần",
+                                      "viewer.rail.show":  "Ghi chú và danh mục",
+                                      "viewer.rail.controls":  "Bảng bên",
+                                      "viewer.rail.collapse":  "Thu gọn bảng",
+                                      "viewer.rail.bottom":  "Đưa bảng xuống dưới",
+                                      "viewer.rail.right":  "Đưa bảng sang bên",
+                                      "viewer.guide.title":  "Khám phá hệ thống",
+                                      "viewer.guide.eyebrow":  "Hướng dẫn",
+                                      "viewer.guide.close":  "Đóng hướng dẫn",
+                                      "viewer.guide.open":  "Mở hướng dẫn",
+                                      "viewer.guide.find":  "Tìm thành phần",
+                                      "viewer.guide.route":  "Theo dõi đường đi",
+                                      "viewer.guide.map":  "Xem toàn bộ hệ thống",
+                                      "viewer.guide.lens":  "So sánh vai trò",
+                                      "viewer.guide.present":  "Bật trình chiếu",
+                                      "viewer.guide.shortcuts":  "Phím tắt",
+                                      "viewer.nav.controls":  "Điều khiển sơ đồ",
+                                      "viewer.nav.route":  "Theo dõi đường đi",
+                                      "viewer.nav.route.title":  "Theo dõi đường đi (R)",
+                                      "viewer.nav.route.short":  "ĐƯỜNG ĐI",
+                                      "viewer.nav.radar":  "Mở bản đồ",
+                                      "viewer.nav.radar.title":  "Bản đồ (M)",
+                                      "viewer.nav.radar.short":  "BẢN ĐỒ",
+                                      "viewer.nav.lens":  "So sánh các vai trò",
+                                      "viewer.nav.lens.title":  "So sánh vai trò (L)",
+                                      "viewer.nav.lens.short":  "VAI TRÒ",
+                                      "viewer.nav.find":  "Tìm thành phần",
+                                      "viewer.nav.find.title":  "Tìm thành phần (/)",
+                                      "viewer.nav.guide":  "Xem hướng dẫn",
+                                      "viewer.nav.guide.title":  "Hướng dẫn (?)",
+                                      "viewer.nav.zoomOut":  "Thu nhỏ",
+                                      "viewer.nav.zoomOut.title":  "Thu nhỏ (-)",
+                                      "viewer.nav.reset":  "Đặt lại góc nhìn",
+                                      "viewer.nav.reset.title":  "Đặt lại góc nhìn (0)",
+                                      "viewer.nav.zoomIn":  "Phóng to",
+                                      "viewer.nav.zoomIn.title":  "Phóng to (+)",
+                                      "viewer.nav.read":  "ĐỌC",
+                                      "viewer.nav.level.map":  "BẢN ĐỒ",
+                                      "viewer.nav.level.read":  "ĐỌC",
+                                      "viewer.nav.level.full":  "CHI TIẾT",
+                                      "viewer.nav.level.auto":  "TỰ ĐỘNG",
+                                      "viewer.nav.detail.full":  "Xem đầy đủ chi tiết",
+                                      "viewer.route.eyebrow":  "Đường đi",
+                                      "viewer.route.start":  "Chọn thành phần bắt đầu",
+                                      "viewer.route.start.find":  "Tìm điểm đầu",
+                                      "viewer.route.pickTwo":  "Chọn hai thành phần trên sơ đồ",
+                                      "viewer.route.pickOne":  "Chọn một thành phần trên sơ đồ",
+                                      "viewer.route.instructions":  "Chọn điểm đầu, rồi chọn điểm cuối. Đường đi theo chiều mũi tên.",
+                                      "viewer.route.destination":  "Đường đi từ {label} kết thúc ở đâu?",
+                                      "viewer.route.destination.find":  "Tìm điểm cuối",
+                                      "viewer.route.clear":  "Xóa",
+                                      "viewer.route.journey":  "Hành trình",
+                                      "viewer.route.overview":  "Tổng quan",
+                                      "viewer.route.pause.label":  "Tạm dừng",
+                                      "viewer.route.replay.label":  "Phát lại",
+                                      "viewer.finder.title":  "Tìm thành phần",
+                                      "viewer.finder.placeholder":  "Nhập tên hoặc mã thành phần",
+                                      "viewer.finder.empty":  "Không có kết quả",
+                                      "viewer.finder.results":  "Thành phần trong sơ đồ",
+                                      "viewer.finder.result.focus":  "Xem {label}",
+                                      "viewer.passport.eyebrow":  "Chi tiết thành phần",
+                                      "viewer.passport.metadata":  "Thông tin thành phần",
+                                      "viewer.passport.evidence":  "Bằng chứng từ mã nguồn",
+                                      "viewer.passport.verified":  "Đã đối chiếu mã nguồn",
+                                      "viewer.passport.verificationScope":  "Đã đối chiếu với phiên bản Git cục bộ được ghi trên sơ đồ.",
+                                      "viewer.passport.relations":  "Liên kết",
+                                      "viewer.passport.upstream":  "Đầu vào",
+                                      "viewer.passport.downstream":  "Đầu ra",
+                                      "viewer.passport.reach":  "Phạm vi kết nối",
+                                      "viewer.passport.close":  "Đóng chi tiết thành phần",
+                                      "viewer.passport.copy":  "Sao chép liên kết",
+                                      "viewer.passport.sourceCount.one":  "{count} tham chiếu mã nguồn",
+                                      "viewer.passport.sourceCount.other":  "{count} tham chiếu mã nguồn",
+                                      "viewer.passport.relationship.summary":  "{out} đi ra · {in} đi vào{loops}",
+                                      "viewer.passport.relationship.show.one":  "Xem {count} liên kết",
+                                      "viewer.passport.relationship.show.other":  "Xem {count} liên kết",
+                                      "viewer.common.copyLink":  "Sao chép liên kết",
+                                      "viewer.common.clear":  "Xóa",
+                                      "viewer.common.close":  "Đóng",
+                                      "viewer.common.copied":  "Đã sao chép",
+                                      "viewer.common.copyFailed":  "Không sao chép được",
+                                      "legend.architecture.frontend":  "Giao diện",
+                                      "viewer.kind.frontend":  "Giao diện",
+                                      "legend.architecture.backend":  "Xử lý nghiệp vụ",
+                                      "viewer.kind.backend":  "Xử lý nghiệp vụ",
+                                      "legend.architecture.database":  "Cơ sở dữ liệu",
+                                      "viewer.kind.database":  "Cơ sở dữ liệu",
+                                      "legend.architecture.cloud":  "Kho đối tượng",
+                                      "viewer.kind.cloud":  "Kho đối tượng",
+                                      "legend.architecture.security":  "Bảo vệ",
+                                      "viewer.kind.security":  "Bảo vệ",
+                                      "legend.architecture.messagebus":  "Hàng đợi",
+                                      "viewer.kind.messagebus":  "Hàng đợi",
+                                      "legend.architecture.external":  "Bên ngoài",
+                                      "viewer.kind.external":  "Bên ngoài"
+                                  }
+             },
+    "participants":  [
+                         {
+                             "id":  "nguoi",
+                             "type":  "external",
+                             "label":  "Người dùng",
+                             "sublabel":  "Chủ địa chỉ email",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/apps/web/components/email-otp-signin.tsx",
+                                                 "line":  291,
+                                                 "end_line":  371,
+                                                 "label":  "Điền thông tin và chọn vai trò"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/web/components/email-otp-signin.tsx",
+                                                 "line":  407,
+                                                 "end_line":  449,
+                                                 "label":  "Nhập và xác nhận mã OTP"
+                                             }
+                                         ]
+                         },
+                         {
+                             "id":  "web",
+                             "type":  "frontend",
+                             "label":  "Trình duyệt",
+                             "sublabel":  "Mẫu đăng ký",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/apps/web/components/email-otp-signin.tsx",
+                                                 "line":  160,
+                                                 "end_line":  197,
+                                                 "label":  "Yêu cầu mã cho hồ sơ đăng ký"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/web/components/email-otp-signin.tsx",
+                                                 "line":  199,
+                                                 "end_line":  249,
+                                                 "label":  "Gửi lại và xác minh mã"
+                                             }
+                                         ]
+                         },
+                         {
+                             "id":  "api",
+                             "type":  "backend",
+                             "label":  "API xác thực",
+                             "sublabel":  "NestJS",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/apps/api/src/registration-otp.ts",
+                                                 "line":  56,
+                                                 "end_line":  95,
+                                                 "label":  "Chuẩn bị hồ sơ đăng ký"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/api/src/registration-otp.ts",
+                                                 "line":  117,
+                                                 "end_line":  133,
+                                                 "label":  "Ghi yêu cầu và thư vào outbox"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/api/src/registration-otp.ts",
+                                                 "line":  198,
+                                                 "end_line":  260,
+                                                 "label":  "Xác minh và tạo tài khoản"
+                                             }
+                                         ]
+                         },
+                         {
+                             "id":  "db",
+                             "type":  "database",
+                             "label":  "PostgreSQL",
+                             "sublabel":  "Yêu cầu và thư chờ",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/apps/api/src/registration-otp.ts",
+                                                 "line":  117,
+                                                 "end_line":  132,
+                                                 "label":  "Ghi cùng giao dịch"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/api/src/registration-otp.ts",
+                                                 "line":  210,
+                                                 "end_line":  255,
+                                                 "label":  "Khóa và hoàn tất xác minh"
+                                             }
+                                         ]
+                         },
+                         {
+                             "id":  "worker",
+                             "type":  "backend",
+                             "label":  "Worker nền",
+                             "sublabel":  "Gửi thư chờ",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/apps/background-worker/src/main.ts",
+                                                 "line":  207,
+                                                 "end_line":  230,
+                                                 "label":  "Nhận một sự kiện outbox"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/background-worker/src/main.ts",
+                                                 "line":  280,
+                                                 "end_line":  315,
+                                                 "label":  "Giải mã và chuyển thư qua SMTP"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/background-worker/src/main.ts",
+                                                 "line":  500,
+                                                 "end_line":  506,
+                                                 "label":  "Đọc định kỳ hàng thư"
+                                             }
+                                         ]
+                         },
+                         {
+                             "id":  "smtp",
+                             "type":  "external",
+                             "label":  "Máy chủ thư",
+                             "sublabel":  "SMTP",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/apps/background-worker/src/main.ts",
+                                                 "line":  51,
+                                                 "end_line":  65,
+                                                 "label":  "Kết nối nhà cung cấp thư"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/background-worker/src/main.ts",
+                                                 "line":  300,
+                                                 "end_line":  308,
+                                                 "label":  "Gửi đến địa chỉ đã đăng ký"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/api/src/email-otp.ts",
+                                                 "line":  6,
+                                                 "end_line":  18,
+                                                 "label":  "Thời hạn và độ dài mã"
+                                             }
+                                         ]
+                         }
+                     ],
+    "segments":  [
+                     {
+                         "from":  148,
+                         "to":  293,
+                         "label":  "Yêu cầu mã"
+                     },
+                     {
+                         "from":  307,
+                         "to":  415,
+                         "label":  "Gửi thư"
+                     },
+                     {
+                         "from":  432,
+                         "to":  645,
+                         "label":  "Xác minh"
+                     }
+                 ],
+    "messages":  [
+                     {
+                         "id":  "fill",
+                         "from":  "nguoi",
+                         "to":  "web",
+                         "y":  170,
+                         "label":  "Điền hồ sơ",
+                         "variant":  "default"
+                     },
+                     {
+                         "id":  "req",
+                         "from":  "web",
+                         "to":  "api",
+                         "y":  205,
+                         "label":  "Yêu cầu OTP",
+                         "variant":  "emphasis"
+                     },
+                     {
+                         "id":  "save",
+                         "from":  "api",
+                         "to":  "db",
+                         "y":  240,
+                         "label":  "Lưu yêu cầu và thư",
+                         "variant":  "default"
+                     },
+                     {
+                         "id":  "handle",
+                         "from":  "api",
+                         "to":  "web",
+                         "y":  275,
+                         "label":  "Trả requestId",
+                         "variant":  "return"
+                     },
+                     {
+                         "id":  "claim",
+                         "from":  "worker",
+                         "to":  "db",
+                         "y":  331,
+                         "label":  "Nhận thư chờ",
+                         "variant":  "default"
+                     },
+                     {
+                         "id":  "send",
+                         "from":  "worker",
+                         "to":  "smtp",
+                         "y":  365,
+                         "label":  "Gửi email OTP",
+                         "variant":  "dashed"
+                     },
+                     {
+                         "id":  "receive",
+                         "from":  "smtp",
+                         "to":  "nguoi",
+                         "y":  399,
+                         "label":  "Nhận mã qua email",
+                         "variant":  "dashed"
+                     },
+                     {
+                         "id":  "enter",
+                         "from":  "nguoi",
+                         "to":  "web",
+                         "y":  456,
+                         "label":  "Nhập mã OTP",
+                         "variant":  "default"
+                     },
+                     {
+                         "id":  "submit",
+                         "from":  "web",
+                         "to":  "api",
+                         "y":  490,
+                         "label":  "Gửi mã và requestId",
+                         "variant":  "security"
+                     },
+                     {
+                         "id":  "lock",
+                         "from":  "api",
+                         "to":  "db",
+                         "y":  523,
+                         "label":  "Đọc và khóa yêu cầu",
+                         "variant":  "default"
+                     },
+                     {
+                         "id":  "create",
+                         "from":  "api",
+                         "to":  "db",
+                         "y":  556,
+                         "label":  "Mã đúng → tạo user",
+                         "variant":  "emphasis"
+                     },
+                     {
+                         "id":  "ok",
+                         "from":  "api",
+                         "to":  "web",
+                         "y":  589,
+                         "label":  "Đăng ký thành công",
+                         "variant":  "return"
+                     },
+                     {
+                         "id":  "next",
+                         "from":  "web",
+                         "to":  "nguoi",
+                         "y":  624,
+                         "label":  "Mở trang đăng nhập",
+                         "variant":  "return"
+                     }
+                 ],
+    "cards":  [
+                  {
+                      "dot":  "cyan",
+                      "title":  "Yêu cầu trên trình duyệt",
+                      "items":  [
+                                    "Hai lệnh POST chính là /api/v1/auth/email-otp/request và /api/v1/auth/email-otp/verify. Người đăng ký chọn USER hoặc AUTHOR."
+                                ]
+                  },
+                  {
+                      "dot":  "amber",
+                      "title":  "Thử lại hoặc hủy",
+                      "items":  [
+                                    "OTP gồm 6 chữ số, có hiệu lực 8 phút. Sau 5 lần sai, yêu cầu hết hiệu lực. Có thể gửi lại sau 60 giây hoặc hủy yêu cầu đang chờ."
+                                ]
+                  },
+                  {
+                      "dot":  "emerald",
+                      "title":  "Thời điểm tạo tài khoản",
+                      "items":  [
+                                    "API lưu bản băm mật khẩu, bản băm OTP và thư chờ. Khi mã hợp lệ, API đánh dấu mã đã dùng và tạo tài khoản trong cùng giao dịch. Người dùng đăng nhập ở bước kế tiếp."
+                                ]
+                  }
+              ]
+}

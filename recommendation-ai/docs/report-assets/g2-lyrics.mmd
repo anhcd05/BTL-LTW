@@ -1,0 +1,25 @@
+sequenceDiagram
+    actor T as Tác giả
+    participant S as Author Studio
+    participant A as API
+    participant DB as PostgreSQL
+    participant P as Màn hình lời
+    actor U as Người nghe
+    T->>S: Nhập lời có mốc thời gian hoặc tải tệp .lrc
+    S->>A: PUT /api/v1/studio/tracks/:id/lyrics {lines, sourceVersion}
+    A->>DB: SELECT ... FOR UPDATE (bài của chính tác giả)
+    alt sourceVersion đã thay đổi
+        A-->>S: 409 SOURCE_VERSION_CHANGED
+    else Hợp lệ, mốc cuối không vượt thời lượng
+        A->>DB: Lưu lời gắn với sourceVersion hiện hành
+        A-->>S: 200 lời đã lưu
+    end
+    U->>P: Mở Lời bài hát trên trình phát
+    P->>A: GET /api/v1/tracks/:id/lyrics
+    A->>DB: Đọc lời và sourceVersion của bài
+    A-->>P: Các dòng {startMs, text}, hoặc null nếu lời thuộc nguồn cũ
+    loop Mỗi khung hình (requestAnimationFrame)
+        P->>P: So currentTime với startMs, làm nổi và cuộn tới dòng đang phát
+    end
+    U->>P: Bấm một dòng lời
+    P->>P: seekTo(startMs / 1000)

@@ -1,0 +1,1 @@
+{"extends":"../infosound/tsconfig.base.json","compilerOptions":{"rootDir":"src","outDir":"dist","jsx":"react-jsx"},"include":["src/**/*.ts","src/**/*.tsx"]}

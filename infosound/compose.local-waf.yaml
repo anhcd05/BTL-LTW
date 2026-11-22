@@ -1,0 +1,9 @@
+# Applied only when the private local runtime has waf-enabled.json.
+# Public origins stay unchanged; SafeLine owns HTTPS ports 3443 and 9443.
+services:
+  gateway:
+    ports: !override
+      - '127.0.0.1:${APP_HTTP_PORT:-18080}:8080'
+      - '127.0.0.1:13443:8443'
+      # Avoid Windows/Hyper-V excluded range 19399-19498 on this machine.
+      - '127.0.0.1:29443:9443'

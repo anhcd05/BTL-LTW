@@ -1,0 +1,12 @@
+# Build context hygiene for the `recommendation_ai` additional context (infra/Dockerfile.server).
+node_modules
+**/node_modules
+**/dist
+**/*.tsbuildinfo
+reports
+demo
+docs
+.env*
+**/*.key
+**/.cache
+**/*.log

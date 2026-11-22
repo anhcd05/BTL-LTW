@@ -1,0 +1,8 @@
+{
+  "version":"moderation.v2",
+  "labels":["harassment","hate","threat","sexual","spam","scam","privacy","profanity"],
+  "holdLabels":["harassment","hate","threat","sexual","spam","scam","privacy","profanity"],
+  "reasonCodes":["NO_VIOLATION","ARTISTIC_CRITICISM","PROFANITY_CONTEXTUAL","PROFANITY_PROHIBITED","TARGETED_HARASSMENT","HATE_TARGETING_GROUP","VIOLENT_THREAT","SEXUAL_CONTENT","PROMOTIONAL_SPAM","SCAM_SOLICITATION","PRIVATE_DATA_EXPOSURE","AMBIGUOUS_CONTEXT"],
+  "prohibitedTerms":["ngu","vl","vcl","vkl","đcm","dcm","đkm","dkm","đm","địt","đụ","lồn","cặc","cứt","đéo","đếch","đĩ","điếm","vãi","mẹ kiếp","chó đẻ","khốn nạn","đần độn","dit me","du ma","du me","vai lon","vai ca lon"],
+  "strictRuleVersion":"explicit-language.v1"
+}

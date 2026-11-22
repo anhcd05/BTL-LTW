@@ -1,0 +1,10 @@
+{
+  "name": "@infosound/comment-moderation", "version": "0.1.0", "private": true,
+  "exports": {"./analyzer":{"types":"./dist/analyzer.d.ts","default":"./dist/analyzer.js"},"./server":{"types":"./dist/server.d.ts","default":"./dist/server.js"},"./browser":{"types":"./dist/browser.d.ts","default":"./dist/browser.js"},"./contracts":{"types":"./dist/contracts/index.d.ts","default":"./dist/contracts/index.js"},"./styles.css":"./src/ui/moderation.css"},
+  "typesVersions":{"*":{"server":["dist/server.d.ts"],"analyzer":["dist/analyzer.d.ts"],"browser":["dist/browser.d.ts"],"contracts":["dist/contracts/index.d.ts"]}},
+  "files": ["dist","prompts","policies","src/ui/moderation.css","scripts","tests/fixtures"],
+  "scripts": {"build":"tsc -p tsconfig.json", "typecheck":"tsc -p tsconfig.json --noEmit", "test":"node --test tests/unit/*.test.cjs tests/unit/*.test.mjs", "test:integration":"node --test tests/integration/*.test.cjs", "test:http":"node --test tests/integration/http-flow.cjs", "test:e2e":"node tests/e2e/website.cjs", "diagnose":"node scripts/smoke.cjs", "smoke":"node scripts/smoke.cjs --live", "evaluate":"node scripts/evaluate-results.mjs"},
+  "dependencies":{"@google/genai":"2.32.0","@infosound/database":"workspace:*","zod":"4.6.7"},
+  "peerDependencies":{"react":"19.3.1"},
+  "devDependencies":{"@types/react":"19.3.0","@types/node":"24.19.2","typescript":"5.9.3"}
+}

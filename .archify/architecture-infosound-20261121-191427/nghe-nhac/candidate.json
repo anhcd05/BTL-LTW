@@ -1,0 +1,416 @@
+{
+    "schema_version":  1,
+    "diagram_type":  "sequence",
+    "meta":  {
+                 "title":  "Phát nhạc và ghi nhận lượt nghe",
+                 "output":  ".archify/architecture-infosound-20261121-191427/nghe-nhac/nghe-nhac.html",
+                 "quality_profile":  "showcase",
+                 "locale":  "vi",
+                 "repository":  {
+                                    "url":  "git@gitlab.com:5pidey/int1434.git",
+                                    "revision":  "74f90f2a07e41bb532d2f31831edb66ab7a6a73c",
+                                    "link_mode":  "local-only"
+                                },
+                 "translations":  {
+                                      "viewer.toolbar.actions":  "Công cụ sơ đồ",
+                                      "viewer.preset.choose.title":  "Chọn kiểu hiển thị (S)",
+                                      "page.title":  "Sơ đồ {title}",
+                                      "diagram.description.architecture":  "Sơ đồ kiến trúc InfoSound.",
+                                      "diagram.description.sequence":  "Sơ đồ tuần tự của InfoSound.",
+                                      "node.focus":  "Xem {label}",
+                                      "node.focus.detail":  "Xem {label}, {detail}",
+                                      "node.context.architecture":  "Thành phần hệ thống",
+                                      "node.context.sequence":  "Thành phần tham gia",
+                                      "legend.title":  "Chú giải",
+                                      "legend.sequence.emphasis":  "Yêu cầu chính",
+                                      "legend.sequence.return":  "Phản hồi",
+                                      "legend.sequence.security":  "Kiểm tra quyền",
+                                      "legend.sequence.dashed":  "Bất đồng bộ",
+                                      "legend.sequence.default":  "Thông điệp",
+                                      "viewer.theme.dark":  "Tối",
+                                      "viewer.theme.light":  "Sáng",
+                                      "viewer.theme.toggle":  "Đổi giao diện sáng/tối",
+                                      "viewer.theme.toggle.title":  "Đổi giao diện (T)",
+                                      "viewer.preset.style":  "Kiểu",
+                                      "viewer.preset.choose":  "Chọn kiểu hiển thị",
+                                      "viewer.preset.classic":  "Cổ điển",
+                                      "viewer.preset.classic.short":  "Cổ điển",
+                                      "viewer.motion.live":  "Động",
+                                      "viewer.motion.still":  "Tĩnh",
+                                      "viewer.motion.pause":  "Dừng chuyển động",
+                                      "viewer.motion.resume":  "Bật chuyển động",
+                                      "viewer.present.present":  "Trình chiếu",
+                                      "viewer.present.exit.label":  "Thoát",
+                                      "viewer.present.enter":  "Bật trình chiếu",
+                                      "viewer.present.enter.title":  "Trình chiếu (F)",
+                                      "viewer.present.exit":  "Thoát trình chiếu",
+                                      "viewer.present.exit.title":  "Thoát trình chiếu (F hoặc Esc)",
+                                      "viewer.export.button":  "Xuất",
+                                      "viewer.export.button.title":  "Xuất sơ đồ (E)",
+                                      "viewer.export.diagram":  "Xuất sơ đồ",
+                                      "viewer.export.menu":  "Xuất",
+                                      "viewer.export.subtitle":  "Chọn định dạng tệp",
+                                      "viewer.export.image":  "Hình ảnh",
+                                      "viewer.export.share":  "Chia sẻ",
+                                      "viewer.export.copyDiagram":  "Sao chép sơ đồ",
+                                      "viewer.export.raster":  "Ảnh raster",
+                                      "viewer.export.lossless":  "Ảnh nén không mất dữ liệu",
+                                      "viewer.export.editable":  "Ảnh vector có thể chỉnh sửa",
+                                      "viewer.export.vectorMotion":  "Vector và chuyển động",
+                                      "viewer.export.vectorMotion.heading":  "Vector và chuyển động",
+                                      "viewer.outline.title":  "Danh mục thành phần",
+                                      "viewer.rail.show":  "Ghi chú và danh mục",
+                                      "viewer.rail.controls":  "Bảng bên",
+                                      "viewer.rail.collapse":  "Thu gọn bảng",
+                                      "viewer.rail.bottom":  "Đưa bảng xuống dưới",
+                                      "viewer.rail.right":  "Đưa bảng sang bên",
+                                      "viewer.guide.title":  "Khám phá hệ thống",
+                                      "viewer.guide.eyebrow":  "Hướng dẫn",
+                                      "viewer.guide.close":  "Đóng hướng dẫn",
+                                      "viewer.guide.open":  "Mở hướng dẫn",
+                                      "viewer.guide.find":  "Tìm thành phần",
+                                      "viewer.guide.route":  "Theo dõi đường đi",
+                                      "viewer.guide.map":  "Xem toàn bộ hệ thống",
+                                      "viewer.guide.lens":  "So sánh vai trò",
+                                      "viewer.guide.present":  "Bật trình chiếu",
+                                      "viewer.guide.shortcuts":  "Phím tắt",
+                                      "viewer.nav.controls":  "Điều khiển sơ đồ",
+                                      "viewer.nav.route":  "Theo dõi đường đi",
+                                      "viewer.nav.route.title":  "Theo dõi đường đi (R)",
+                                      "viewer.nav.route.short":  "ĐƯỜNG ĐI",
+                                      "viewer.nav.radar":  "Mở bản đồ",
+                                      "viewer.nav.radar.title":  "Bản đồ (M)",
+                                      "viewer.nav.radar.short":  "BẢN ĐỒ",
+                                      "viewer.nav.lens":  "So sánh các vai trò",
+                                      "viewer.nav.lens.title":  "So sánh vai trò (L)",
+                                      "viewer.nav.lens.short":  "VAI TRÒ",
+                                      "viewer.nav.find":  "Tìm thành phần",
+                                      "viewer.nav.find.title":  "Tìm thành phần (/)",
+                                      "viewer.nav.guide":  "Xem hướng dẫn",
+                                      "viewer.nav.guide.title":  "Hướng dẫn (?)",
+                                      "viewer.nav.zoomOut":  "Thu nhỏ",
+                                      "viewer.nav.zoomOut.title":  "Thu nhỏ (-)",
+                                      "viewer.nav.reset":  "Đặt lại góc nhìn",
+                                      "viewer.nav.reset.title":  "Đặt lại góc nhìn (0)",
+                                      "viewer.nav.zoomIn":  "Phóng to",
+                                      "viewer.nav.zoomIn.title":  "Phóng to (+)",
+                                      "viewer.nav.read":  "ĐỌC",
+                                      "viewer.nav.level.map":  "BẢN ĐỒ",
+                                      "viewer.nav.level.read":  "ĐỌC",
+                                      "viewer.nav.level.full":  "CHI TIẾT",
+                                      "viewer.nav.level.auto":  "TỰ ĐỘNG",
+                                      "viewer.nav.detail.full":  "Xem đầy đủ chi tiết",
+                                      "viewer.route.eyebrow":  "Đường đi",
+                                      "viewer.route.start":  "Chọn thành phần bắt đầu",
+                                      "viewer.route.start.find":  "Tìm điểm đầu",
+                                      "viewer.route.pickTwo":  "Chọn hai thành phần trên sơ đồ",
+                                      "viewer.route.pickOne":  "Chọn một thành phần trên sơ đồ",
+                                      "viewer.route.instructions":  "Chọn điểm đầu, rồi chọn điểm cuối. Đường đi theo chiều mũi tên.",
+                                      "viewer.route.destination":  "Đường đi từ {label} kết thúc ở đâu?",
+                                      "viewer.route.destination.find":  "Tìm điểm cuối",
+                                      "viewer.route.clear":  "Xóa",
+                                      "viewer.route.journey":  "Hành trình",
+                                      "viewer.route.overview":  "Tổng quan",
+                                      "viewer.route.pause.label":  "Tạm dừng",
+                                      "viewer.route.replay.label":  "Phát lại",
+                                      "viewer.finder.title":  "Tìm thành phần",
+                                      "viewer.finder.placeholder":  "Nhập tên hoặc mã thành phần",
+                                      "viewer.finder.empty":  "Không có kết quả",
+                                      "viewer.finder.results":  "Thành phần trong sơ đồ",
+                                      "viewer.finder.result.focus":  "Xem {label}",
+                                      "viewer.passport.eyebrow":  "Chi tiết thành phần",
+                                      "viewer.passport.metadata":  "Thông tin thành phần",
+                                      "viewer.passport.evidence":  "Bằng chứng từ mã nguồn",
+                                      "viewer.passport.verified":  "Đã đối chiếu mã nguồn",
+                                      "viewer.passport.verificationScope":  "Đã đối chiếu với phiên bản Git cục bộ được ghi trên sơ đồ.",
+                                      "viewer.passport.relations":  "Liên kết",
+                                      "viewer.passport.upstream":  "Đầu vào",
+                                      "viewer.passport.downstream":  "Đầu ra",
+                                      "viewer.passport.reach":  "Phạm vi kết nối",
+                                      "viewer.passport.close":  "Đóng chi tiết thành phần",
+                                      "viewer.passport.copy":  "Sao chép liên kết",
+                                      "viewer.passport.sourceCount.one":  "{count} tham chiếu mã nguồn",
+                                      "viewer.passport.sourceCount.other":  "{count} tham chiếu mã nguồn",
+                                      "viewer.passport.relationship.summary":  "{out} đi ra · {in} đi vào{loops}",
+                                      "viewer.passport.relationship.show.one":  "Xem {count} liên kết",
+                                      "viewer.passport.relationship.show.other":  "Xem {count} liên kết",
+                                      "viewer.common.copyLink":  "Sao chép liên kết",
+                                      "viewer.common.clear":  "Xóa",
+                                      "viewer.common.close":  "Đóng",
+                                      "viewer.common.copied":  "Đã sao chép",
+                                      "viewer.common.copyFailed":  "Không sao chép được",
+                                      "legend.architecture.frontend":  "Giao diện",
+                                      "viewer.kind.frontend":  "Giao diện",
+                                      "legend.architecture.backend":  "Xử lý nghiệp vụ",
+                                      "viewer.kind.backend":  "Xử lý nghiệp vụ",
+                                      "legend.architecture.database":  "Cơ sở dữ liệu",
+                                      "viewer.kind.database":  "Cơ sở dữ liệu",
+                                      "legend.architecture.cloud":  "Kho đối tượng",
+                                      "viewer.kind.cloud":  "Kho đối tượng",
+                                      "legend.architecture.security":  "Bảo vệ",
+                                      "viewer.kind.security":  "Bảo vệ",
+                                      "legend.architecture.messagebus":  "Hàng đợi",
+                                      "viewer.kind.messagebus":  "Hàng đợi",
+                                      "legend.architecture.external":  "Bên ngoài",
+                                      "viewer.kind.external":  "Bên ngoài"
+                                  }
+             },
+    "participants":  [
+                         {
+                             "id":  "trinhphat",
+                             "type":  "frontend",
+                             "label":  "Trình phát",
+                             "sublabel":  "Trình duyệt",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/apps/web/features/player/player-provider.tsx",
+                                                 "line":  223,
+                                                 "end_line":  229
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/web/features/player/player-provider.tsx",
+                                                 "line":  278,
+                                                 "end_line":  294
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/web/features/player/player-provider.tsx",
+                                                 "line":  565,
+                                                 "end_line":  601
+                                             }
+                                         ]
+                         },
+                         {
+                             "id":  "api",
+                             "type":  "backend",
+                             "label":  "NestJS API",
+                             "sublabel":  "Quyền phát và lượt nghe",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/apps/api/src/features/tracks/tracks.controller.ts",
+                                                 "line":  814,
+                                                 "end_line":  853
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/api/src/features/tracks/tracks.controller.ts",
+                                                 "line":  855,
+                                                 "end_line":  886
+                                             },
+                                             {
+                                                 "path":  "infosound/packages/storage/src/index.ts",
+                                                 "line":  87,
+                                                 "end_line":  117
+                                             }
+                                         ]
+                         },
+                         {
+                             "id":  "postgres",
+                             "type":  "database",
+                             "label":  "PostgreSQL",
+                             "sublabel":  "Bài, bản phát, lượt nghe",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/apps/api/src/features/tracks/track-view.ts",
+                                                 "line":  6,
+                                                 "end_line":  10
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/api/src/listens.ts",
+                                                 "line":  106,
+                                                 "end_line":  138
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/api/src/listens.ts",
+                                                 "line":  141,
+                                                 "end_line":  172
+                                             }
+                                         ]
+                         },
+                         {
+                             "id":  "edge",
+                             "type":  "security",
+                             "label":  "Cổng media",
+                             "sublabel":  "SafeLine và Nginx",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/compose.local-waf.yaml",
+                                                 "line":  1,
+                                                 "end_line":  9
+                                             },
+                                             {
+                                                 "path":  "infosound/infra/nginx/nginx.conf.template",
+                                                 "line":  82,
+                                                 "end_line":  92
+                                             },
+                                             {
+                                                 "path":  "infosound/infra/nginx/nginx.conf.template",
+                                                 "line":  121,
+                                                 "end_line":  140
+                                             }
+                                         ]
+                         },
+                         {
+                             "id":  "s3",
+                             "type":  "database",
+                             "label":  "SeaweedFS",
+                             "sublabel":  "Kho audio riêng tư",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/compose.yaml",
+                                                 "line":  253,
+                                                 "end_line":  259
+                                             },
+                                             {
+                                                 "path":  "infosound/infra/nginx/nginx.conf.template",
+                                                 "line":  121,
+                                                 "end_line":  131
+                                             },
+                                             {
+                                                 "path":  "infosound/packages/storage/src/index.ts",
+                                                 "line":  92,
+                                                 "end_line":  105
+                                             }
+                                         ]
+                         }
+                     ],
+    "segments":  [
+                     {
+                         "from":  148,
+                         "to":  294,
+                         "label":  "Cấp quyền phát"
+                     },
+                     {
+                         "from":  306,
+                         "to":  452,
+                         "label":  "Truyền âm thanh"
+                     },
+                     {
+                         "from":  464,
+                         "to":  614,
+                         "label":  "Ghi lượt nghe đủ ngưỡng"
+                     }
+                 ],
+    "messages":  [
+                     {
+                         "id":  "grant",
+                         "from":  "trinhphat",
+                         "to":  "api",
+                         "y":  175,
+                         "label":  "GET playback",
+                         "variant":  "emphasis"
+                     },
+                     {
+                         "id":  "lookup",
+                         "from":  "api",
+                         "to":  "postgres",
+                         "y":  210,
+                         "label":  "Tra bài và bản phát",
+                         "variant":  "default"
+                     },
+                     {
+                         "id":  "asset",
+                         "from":  "postgres",
+                         "to":  "api",
+                         "y":  245,
+                         "label":  "Bản phát đúng nguồn",
+                         "variant":  "return"
+                     },
+                     {
+                         "id":  "urls",
+                         "from":  "api",
+                         "to":  "trinhphat",
+                         "y":  279,
+                         "label":  "URL ký số và token¹",
+                         "variant":  "return"
+                     },
+                     {
+                         "id":  "rangerequest",
+                         "from":  "trinhphat",
+                         "to":  "edge",
+                         "y":  333,
+                         "label":  "GET URL ký số · Range",
+                         "variant":  "emphasis"
+                     },
+                     {
+                         "id":  "proxy",
+                         "from":  "edge",
+                         "to":  "s3",
+                         "y":  368,
+                         "label":  "GET theo dải byte",
+                         "variant":  "default"
+                     },
+                     {
+                         "id":  "rangereply",
+                         "from":  "s3",
+                         "to":  "edge",
+                         "y":  403,
+                         "label":  "206 · dải byte",
+                         "variant":  "return"
+                     },
+                     {
+                         "id":  "play",
+                         "from":  "edge",
+                         "to":  "trinhphat",
+                         "y":  438,
+                         "label":  "206 · phát hoặc tua",
+                         "variant":  "return"
+                     },
+                     {
+                         "id":  "submit",
+                         "from":  "trinhphat",
+                         "to":  "api",
+                         "y":  491,
+                         "label":  "Đủ ngưỡng² · POST listens",
+                         "variant":  "emphasis"
+                     },
+                     {
+                         "id":  "check",
+                         "from":  "api",
+                         "to":  "postgres",
+                         "y":  526,
+                         "label":  "Khóa bài, kiểm tra trùng³",
+                         "variant":  "security"
+                     },
+                     {
+                         "id":  "result",
+                         "from":  "postgres",
+                         "to":  "api",
+                         "y":  561,
+                         "label":  "Kết quả giao dịch",
+                         "variant":  "return"
+                     },
+                     {
+                         "id":  "counted",
+                         "from":  "api",
+                         "to":  "trinhphat",
+                         "y":  596,
+                         "label":  "counted · có hoặc trùng",
+                         "variant":  "return"
+                     }
+                 ],
+    "cards":  [
+                  {
+                      "dot":  "cyan",
+                      "title":  "¹ URL có hạn 5 phút",
+                      "items":  [
+                                    "GET /api/v1/tracks/:id/playback nhận cả khách lẫn tài khoản. Bài phải PUBLISHED, READY, chưa xóa, tác giả còn hoạt động và bản phát đã xác minh khớp sourceVersion.",
+                                    "API tự ký URL cho đúng phiên bản đối tượng. Trình duyệt đọc byte qua cổng media 9443. Với thời lượng hợp lệ, API cấp thêm token nghe có hạn 15 phút cho đúng người, bài và phiên bản nguồn."
+                                ]
+                  },
+                  {
+                      "dot":  "emerald",
+                      "title":  "² Khi nào trình phát gửi lượt nghe?",
+                      "items":  [
+                                    "Ngưỡng bằng giá trị nhỏ hơn giữa 30 giây và một nửa thời lượng bài. Trình phát chỉ cộng thời gian âm thanh thực sự tiến, bỏ qua khoảng chờ, tạm dừng và phần nhảy qua khi tua.",
+                                    "POST /api/v1/tracks/:id/listens gửi token. API đối chiếu danh tính, thời gian đã trôi và nguồn hiện hành trước khi ghi."
+                                ]
+                  },
+                  {
+                      "dot":  "violet",
+                      "title":  "³ Cùng người, bài và nguồn trong 30 phút",
+                      "items":  [
+                                    "Lượt đầu đủ điều kiện tăng tổng của bài. Với khách, hệ thống lưu mốc chống trùng theo mã băm của danh tính trình duyệt.",
+                                    "Tài khoản có thêm lịch sử cá nhân. Khi phát lại trong cửa sổ chống trùng, hệ thống chỉ cập nhật lần nghe gần nhất của tài khoản."
+                                ]
+                  }
+              ]
+}

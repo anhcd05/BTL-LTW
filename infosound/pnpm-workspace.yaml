@@ -1,0 +1,18 @@
+packages:
+  - apps/*
+  - packages/*
+  - ../comment-moderation
+  - ../recommendation-ai
+  - ../recommendation-ai/batch
+injectWorkspacePackages: true
+syncInjectedDepsAfterScripts:
+  - build
+overrides:
+  'deepmerge-ts@7.1.5': '8.0.0'
+onlyBuiltDependencies:
+  - '@nestjs/core'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - argon2
+  - prisma
+  - sharp

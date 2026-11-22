@@ -1,0 +1,21 @@
+sequenceDiagram
+    actor U as Người dùng
+    participant W as Web
+    participant A as API
+    participant DB as PostgreSQL
+    U->>W: Bấm tim một bài hát
+    W->>A: PUT /api/v1/tracks/:id/like (bỏ thích: DELETE)
+    A->>DB: Upsert hoặc xóa track_likes theo (user, track)
+    A-->>W: Trạng thái thích và số lượt thích
+    U->>W: Theo dõi nghệ sĩ
+    W->>A: PUT /api/v1/artists/:id/follow (bỏ theo dõi: DELETE)
+    A->>DB: Ghi quan hệ theo dõi
+    U->>W: Mở Thư viện
+    W->>A: GET /api/v1/library, GET /api/v1/library/liked
+    A->>DB: Bài đã thích, playlist, nghệ sĩ đang theo dõi của tài khoản hiện tại
+    A-->>W: Dữ liệu thư viện (chỉ bài còn công khai)
+    U->>W: Mở Lịch sử
+    W->>A: GET /api/v1/me/history
+    A->>DB: track_listens sắp xếp theo lastListenedAt giảm dần
+    A-->>W: Danh sách đã nghe gần đây
+    Note over A,DB: Lượt nghe lặp lại trong 30 phút chỉ cập nhật lastListenedAt

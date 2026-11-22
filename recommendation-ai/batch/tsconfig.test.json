@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "dist-test",
+    "sourceMap": false
+  },
+  "include": [
+    "src/audio.ts",
+    "src/rng.ts",
+    "src/text.ts",
+    "src/world.ts",
+    "src/snapshot.ts",
+    "src/features.ts",
+    "src/lr.ts",
+    "src/metrics.ts",
+    "src/dataset.ts",
+    "src/recommend.ts",
+    "src/guard.ts",
+    "src/embedder.ts",
+    "src/art-render.ts",
+    "src/demo-user.ts",
+    "tests/**/*.ts"
+  ]
+}

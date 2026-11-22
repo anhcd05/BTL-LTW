@@ -1,0 +1,48 @@
+erDiagram
+    users ||--o{ track_engagement : "có"
+    tracks ||--o{ track_engagement : "có"
+    users ||--o{ recommendation_impressions : "được hiển thị"
+    tracks ||--o{ recommendation_impressions : "xuất hiện trong"
+    tracks ||--o| track_embeddings : "có vector"
+    track_engagement {
+        uuid user_id PK
+        uuid track_id PK
+        int source_version
+        int starts
+        int skips
+        int completes
+        timestamptz last_event_at
+        uuid last_token_id
+        bigint last_started_at_ms
+    }
+    recommendation_impressions {
+        uuid id PK
+        uuid request_id
+        uuid user_id FK
+        uuid track_id FK
+        varchar surface
+        int position
+        varchar reason
+        varchar model_version
+        timestamptz shown_at
+        timestamptz clicked_at
+    }
+    track_embeddings {
+        uuid track_id PK
+        int source_version
+        char content_hash
+        varchar model
+        int dims
+        real_array vector
+        timestamptz updated_at
+    }
+    recommendation_models {
+        uuid id PK
+        varchar version UK
+        text_array feature_names
+        double_array weights
+        double bias
+        jsonb metrics
+        boolean active
+        timestamptz created_at
+    }

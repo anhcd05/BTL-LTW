@@ -1,0 +1,26 @@
+# InfoSound trên Docker Desktop (PowerShell)
+# Mở Docker Desktop ở chế độ Linux containers rồi chạy các lệnh dưới đây.
+
+# Khởi động InfoSound và SafeLine
+Set-Location -LiteralPath 'D:\Documents\PTIT\Lập trình web\INT1434\infosound'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\start-local.ps1
+
+# Mở web sau khi script chạy xong
+Start-Process 'https://localhost:3443'
+# Cổng chuyển hướng HTTP trên máy này là http://localhost:28080.
+
+# Khởi động lại cả hai project và giữ các volume dữ liệu
+Set-Location -LiteralPath 'D:\Documents\PTIT\Lập trình web\INT1434\infosound'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\stop-local.ps1
+if ($LASTEXITCODE -eq 0) {
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\start-local.ps1
+}
+
+# Kiểm tra từ thư mục infosound
+docker --context desktop-linux info --format '{{.OSType}}'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\status-local.ps1
+(Invoke-WebRequest -UseBasicParsing -Uri 'https://localhost:3443/health/ready' -TimeoutSec 15).Content
+
+# Xem log nếu web chưa phản hồi
+docker --context desktop-linux logs --tail 80 infosound-local-gateway-1
+docker --context desktop-linux logs --tail 80 safeline-tengine

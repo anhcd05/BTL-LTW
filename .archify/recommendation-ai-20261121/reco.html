@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gợi ý nhạc lai</title>
+<script>
+(function(){try{var t=localStorage.getItem('reco-map-theme');if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(_){}})();
+</script>
+<style>
+:root,[data-theme="dark"]{
+  --bg:#020617;--grid:#1e293b;--text:#f8fafc;--muted:#94a3b8;--dim:#64748b;
+  --panel:rgba(15,23,42,.6);--panel-border:#1e293b;--mask:#0f172a;
+  --arrow:#64748b;--hot:#34d399;--hot-soft:rgba(52,211,153,.18);
+  --fe-f:rgba(8,51,68,.45);--fe-s:#22d3ee;--be-f:rgba(6,78,59,.45);--be-s:#34d399;
+  --db-f:rgba(76,29,149,.45);--db-s:#a78bfa;--cl-f:rgba(120,53,15,.35);--cl-s:#fbbf24;
+  --ml-f:rgba(136,19,55,.4);--ml-s:#fb7185;--ex-f:rgba(30,41,59,.6);--ex-s:#94a3b8;
+  --good:#34d399;--bad:#fb7185;--warn:#fbbf24;--chip:#1e293b;
+}
+[data-theme="light"]{
+  --bg:#f4f5f7;--grid:#e5e7eb;--text:#111827;--muted:#4b5563;--dim:#9ca3af;
+  --panel:#ffffff;--panel-border:#e5e7eb;--mask:#ffffff;
+  --arrow:#9ca3af;--hot:#059669;--hot-soft:rgba(5,150,105,.12);
+  --fe-f:#ecfeff;--fe-s:#0891b2;--be-f:#ecfdf5;--be-s:#059669;--db-f:#f5f3ff;--db-s:#7c3aed;
+  --cl-f:#fffbeb;--cl-s:#d97706;--ml-f:#fff1f2;--ml-s:#e11d48;--ex-f:#f8fafc;--ex-s:#64748b;
+  --good:#059669;--bad:#e11d48;--warn:#b45309;--chip:#f1f5f9;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  background-image:radial-gradient(var(--grid) 1px,transparent 1px);background-size:22px 22px}
+header{max-width:1200px;margin:0 auto;padding:28px 16px 8px;display:flex;gap:16px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+h1{margin:0;font-size:24px;letter-spacing:-.01em}
+header p{margin:6px 0 0;color:var(--muted);max-width:760px}
+button{font:inherit;color:inherit;cursor:pointer}
+.ghost{background:var(--panel);border:1px solid var(--panel-border);border-radius:10px;padding:8px 14px;min-height:40px}
+.ghost:focus-visible,.tab:focus-visible,.flow-btn:focus-visible,.step:focus-visible{outline:2px solid var(--hot);outline-offset:3px}
+nav.tabs{max-width:1200px;margin:8px auto 0;padding:0 16px;display:flex;gap:6px;flex-wrap:wrap}
+.tab{background:transparent;border:1px solid var(--panel-border);border-radius:999px;padding:7px 14px;color:var(--muted);min-height:40px}
+.tab[aria-selected="true"]{background:var(--hot-soft);border-color:var(--hot);color:var(--text)}
+main{max-width:1200px;margin:0 auto;padding:16px}
+section[hidden]{display:none}
+.card{background:var(--panel);border:1px solid var(--panel-border);border-radius:14px;padding:18px}
+.grid2{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px}
+@media (max-width:900px){.grid2{grid-template-columns:1fr}}
+.stack{display:flex;flex-direction:column;gap:16px}
+.stack ol.steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));max-height:none}
+svg{width:100%;height:auto;display:block}
+.node rect{stroke-width:1.6;rx:12}
+.node text{fill:var(--text);font-size:15px;font-weight:600}
+.node .sub{fill:var(--muted);font-size:12px;font-weight:400}
+.node{transition:opacity .25s}
+.k-fe rect{fill:var(--fe-f);stroke:var(--fe-s)}.k-be rect{fill:var(--be-f);stroke:var(--be-s)}
+.k-db rect{fill:var(--db-f);stroke:var(--db-s)}.k-cl rect{fill:var(--cl-f);stroke:var(--cl-s)}
+.k-ml rect{fill:var(--ml-f);stroke:var(--ml-s)}.k-ex rect{fill:var(--ex-f);stroke:var(--ex-s);stroke-dasharray:5 4}
+.edge path{fill:none;stroke:var(--arrow);stroke-width:1.5;transition:stroke .2s,opacity .25s}
+.edge text{fill:var(--dim);font-size:11px}
+.edge.dashed path{stroke-dasharray:6 5}
+.dimmed .node:not(.on){opacity:.28}.dimmed .edge:not(.on){opacity:.18}
+.node.on rect{stroke:var(--hot);stroke-width:2.6;filter:drop-shadow(0 0 10px var(--hot-soft))}
+.edge.on path{stroke:var(--hot);stroke-width:2.6}
+.edge.on text{fill:var(--hot)}
+@media (prefers-reduced-motion:no-preference){.edge.on path{stroke-dasharray:8 6;animation:flow 1s linear infinite}}
+@keyframes flow{to{stroke-dashoffset:-28}}
+.flow-btns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.flow-btn{background:var(--chip);border:1px solid var(--panel-border);border-radius:10px;padding:8px 12px;min-height:40px;text-align:left}
+.flow-btn[aria-pressed="true"]{border-color:var(--hot);background:var(--hot-soft)}
+.flow-summary{color:var(--muted);margin:0 0 10px}
+ol.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;max-height:560px;overflow:auto}
+.step{width:100%;text-align:left;background:transparent;border:1px solid var(--panel-border);border-radius:10px;padding:10px 12px;display:grid;grid-template-columns:28px 1fr;gap:8px}
+.step[aria-current="step"]{border-color:var(--hot);background:var(--hot-soft)}
+.step .n{width:24px;height:24px;border-radius:50%;background:var(--chip);display:grid;place-items:center;font-size:12px;font-weight:700}
+.step b{display:block}.step span.d{color:var(--muted);font-size:13.5px}
+.step code{display:inline-block;margin-top:4px;font-size:12px;color:var(--hot)}
+.pager{display:flex;gap:8px;margin-top:10px}
+h2{font-size:19px;margin:6px 0 12px}h3{font-size:16px;margin:0 0 6px}
+.why{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.why .card p{margin:4px 0;color:var(--muted);font-size:14px}
+.why .card .alt{font-size:13px;color:var(--dim)}
+.tag{display:inline-block;font-size:11.5px;padding:2px 8px;border-radius:999px;background:var(--chip);color:var(--muted);margin-right:4px}
+.table-wrap{overflow-x:auto;border:1px solid var(--panel-border);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+th,td{padding:9px 12px;border-bottom:1px solid var(--panel-border);text-align:start;vertical-align:top}
+th{font-size:12.5px;color:var(--muted);font-weight:600;background:var(--panel)}
+td code,p code,li code{font-size:12.5px;background:var(--chip);padding:1px 5px;border-radius:5px}
+.formula{font-family:ui-monospace,Consolas,monospace;font-size:13.5px;background:var(--chip);border-radius:10px;padding:10px 12px;overflow-x:auto;white-space:pre}
+.timeline{position:relative;margin:0;padding:0 0 0 22px;list-style:none}
+.timeline:before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--panel-border)}
+.timeline>li{position:relative;margin-bottom:14px}
+.timeline>li:before{content:"";position:absolute;left:-20px;top:20px;width:12px;height:12px;border-radius:50%;background:var(--dot,var(--dim));border:2px solid var(--bg)}
+.timeline .verdict{font-weight:600}
+.ok{color:var(--good)}.no{color:var(--bad)}.mid{color:var(--warn)}
+.metrics{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin:10px 0}
+.metric{background:var(--chip);border-radius:10px;padding:10px 12px}
+.metric .v{font-size:20px;font-weight:700}.metric .l{color:var(--muted);font-size:12.5px}
+ul.tight{margin:6px 0;padding-left:20px}ul.tight li{margin:3px 0}
+.note{border-left:3px solid var(--warn);padding:8px 12px;background:var(--chip);border-radius:0 10px 10px 0;color:var(--muted);font-size:14px;margin:10px 0}
+footer{max-width:1200px;margin:0 auto;padding:12px 16px 40px;color:var(--dim);font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Gợi ý nhạc lai ba tầng · InfoSound</h1>
+    <p>Bản đồ chức năng riêng của anhcd: luồng chạy, lý do thiết kế, cách trích xuất đặc trưng và các vòng thử nghiệm. Số liệu lấy từ <code>recommendation-ai/reports/eval-20261121T165118Z.md</code> (e5 thật, 10 seed, dữ liệu mô phỏng).</p>
+  </div>
+  <button class="ghost" id="theme" type="button" aria-label="Đổi giao diện sáng/tối">Sáng / Tối</button>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="Các phần">
+  <button class="tab" role="tab" aria-selected="true" aria-controls="p-flow" id="t-flow">1 · Luồng chạy</button>
+  <button class="tab" role="tab" aria-selected="false" aria-controls="p-why" id="t-why">2 · Vì sao làm thế</button>
+  <button class="tab" role="tab" aria-selected="false" aria-controls="p-feat" id="t-feat">3 · Trích xuất đặc trưng</button>
+  <button class="tab" role="tab" aria-selected="false" aria-controls="p-exp" id="t-exp">4 · Thử nghiệm đã làm</button>
+  <button class="tab" role="tab" aria-selected="false" aria-controls="p-res" id="t-res">5 · Kết quả cuối</button>
+</nav>
+
+<main>
+<!-- ============ 1. FLOW ============ -->
+<section id="p-flow" role="tabpanel" aria-labelledby="t-flow">
+  <div class="stack">
+    <div class="card">
+      <svg id="map" viewBox="0 0 1000 600" role="img" aria-label="Sơ đồ kiến trúc module gợi ý">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--arrow)"/></marker>
+          <marker id="arh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--hot)"/></marker>
+        </defs>
+        <g id="edges"></g>
+        <g id="nodes"></g>
+      </svg>
+      <p class="flow-summary" style="margin-top:8px">Chú giải: <span class="tag">xanh dương · giao diện</span><span class="tag">xanh lá · xử lý</span><span class="tag">tím · dữ liệu</span><span class="tag">vàng · kho đối tượng</span><span class="tag">hồng · mô hình AI</span><span class="tag">viền đứt · dự phòng</span></p>
+    </div>
+    <div class="card">
+      <div class="flow-btns" id="flowBtns" role="group" aria-label="Chọn luồng"></div>
+      <p class="flow-summary" id="flowSummary"></p>
+      <ol class="steps" id="steps"></ol>
+      <div class="pager">
+        <button class="ghost" id="prev" type="button">← Bước trước</button>
+        <button class="ghost" id="next" type="button">Bước sau →</button>
+        <button class="ghost" id="all" type="button">Xem toàn bộ</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. WHY ============ -->
+<section id="p-why" role="tabpanel" aria-labelledby="t-why" hidden>
+  <h2>Các quyết định thiết kế và lý do</h2>
+  <div class="why">
+    <div class="card"><h3>Hybrid ba tầng thay vì một thuật toán</h3>
+      <p>Đây là khuôn mẫu công nghiệp đã công bố (YouTube 2016: lấy ứng viên → xếp hạng). Mỗi tầng có một trách nhiệm: tầng 1 lo độ phủ (recall), tầng 2 lo độ chính xác, tầng 3 lo trải nghiệm. Nguồn ứng viên cũng mang sẵn lý do gợi ý.</p>
+      <p class="alt">Đã cân nhắc: chấm điểm toàn bộ 200 bài một lần. Với quy mô này thì đủ, nhưng không mở rộng được và mất phần giải thích "vì sao".</p></div>
+    <div class="card"><h3>CF item-item, không dùng user-user</h3>
+      <p>Chỉ có khoảng 60 người nghe, nên quan hệ giữa các bài ổn định hơn quan hệ giữa các người (Amazon 2003). Chỉ cần một câu SQL đếm đồng xuất hiện, không phải huấn luyện. Tối đa 50 seed để giới hạn chi phí.</p>
+      <p class="alt">Không làm matrix factorization: dữ liệu quá thưa, thêm độ phức tạp mà khó giải thích.</p></div>
+    <div class="card"><h3>Embedding e5 chạy cục bộ, không dùng LLM</h3>
+      <p>multilingual-e5-small hỗ trợ tiếng Việt, kết quả tất định, không tốn quota, lời bài hát không bị gửi ra ngoài. Weights đóng gói sẵn trong image và kiểm tra sha256.</p>
+      <p class="alt">Đã loại: Gemini hoặc LLM (theo yêu cầu, có rủi ro injection và quota); pgvector (phải sửa image Postgres đã ghim, không cần với dưới 1.000 bài).</p></div>
+    <div class="card"><h3>Hồi quy logistic làm bộ xếp hạng</h3>
+      <p>Ít dữ liệu nên mạng sâu sẽ overfit. LR giải thích được (mỗi đặc trưng có một trọng số), train vài giây, suy luận dưới 1 ms. Đây là ranker kinh điển của CTR (Facebook 2014; YouTube 2016 dùng weighted LR).</p>
+      <p class="alt">Trọng số lưu trong bảng <code>recommendation_models</code>, nên API đổi model mà không cần build lại.</p></div>
+    <div class="card"><h3>Phần nặng chạy theo lô (offline)</h3>
+      <p>Embedding và huấn luyện chạy trong container tools, giống batch pipeline của hệ thật. API online chỉ đọc vector đã tính sẵn, nên không thêm service thứ 9 và background-worker không phải tăng RAM.</p>
+      <p class="alt">Đánh đổi: bài mới chỉ có embedding sau lần chạy lô kế tiếp.</p></div>
+    <div class="card"><h3>Bộ đếm tổng hợp, không ghi log sự kiện</h3>
+      <p><code>track_engagement</code> chỉ đếm start, skip, complete theo từng cặp người–bài. Cách này tôn trọng quy định "no append-only event log" của dự án. Server tự tính thời gian từ listen token, không tin con số client gửi lên.</p></div>
+    <div class="card"><h3>Luật xếp lại ở tầng 3</h3>
+      <p>Mỗi nghệ sĩ tối đa 1 bài (đa dạng); loại bài đã thích, bài nghe trong 14 ngày, bài vừa bỏ qua; ô số 5 dành cho bài khám phá. Nhạc có tỉ lệ nghe lại cao, nên luật "bỏ bài đã nghe" chỉ áp trong 14 ngày, cho kệ "Khám phá".</p></div>
+    <div class="card"><h3>Fallback về luật SQL cũ</h3>
+      <p>Người có dưới 3 tương tác, chưa có model, chưa có embedding, hoặc gặp lỗi, đều quay về <code>userRecommendationSelection</code>. Response giữ tương thích ngược, nên người dùng không bao giờ thấy lỗi 500 từ phần gợi ý. Visitor giữ preview cũ và không bị theo dõi.</p></div>
+    <div class="card"><h3>Token ký cho impression</h3>
+      <p>Review phát hiện có thể giả impression để thao túng ô khám phá và làm bẩn nhãn âm. Vì vậy server ký <code>impressionToken</code> bằng HMAC và chỉ nhận những bài chính nó đã trả về.</p></div>
+    <div class="card"><h3>Thử nghiệm riêng, triển khai một bản</h3>
+      <p>Lúc phát triển, mọi thứ chạy trên stack thử nghiệm riêng <code>infosound-demo</code> (volume, secrets, image riêng) để không đụng dữ liệu thật. Kiểm chứng xong thì gộp về một bản <code>infosound-local</code>: migration bổ sung, dữ liệu tổng hợp seed có đánh dấu (<code>@demo.infosound.local</code>), gỡ được bằng <code>seed --reset-only</code>, có backup trước khi seed.</p>
+      <p class="alt">Đánh đổi: chức năng của các thành viên khác (bảng xếp hạng, tìm kiếm…) cũng thấy 200 bài tổng hợp.</p></div>
+    <div class="card"><h3>Cắt văn bản trước khi nhúng (ý phụ từ SIDD)</h3>
+      <p>Bài báo SIDD (EIDT 2026) chỉ ra rằng nhồi chữ vào trường văn bản dài sẽ kéo lệch vector. Vì vậy văn bản được cắt còn 256 token. Có 2 bài cố ý nhồi từ khóa để đo mức hiển thị. Đây chỉ là ý phụ.</p></div>
+    <div class="card"><h3>Không đưa tên thể loại vào văn bản nhúng</h3>
+      <p>Thể loại đã là đặc trưng có cấu trúc (<code>genre_overlap</code>). Nếu nhúng cả tên thể loại, content_sim sẽ trùng thông tin, gây đa cộng tuyến và làm trọng số dao động, có lúc ra âm.</p></div>
+  </div>
+</section>
+
+<!-- ============ 3. FEATURES ============ -->
+<section id="p-feat" role="tabpanel" aria-labelledby="t-feat" hidden>
+  <h2>Từ bảng dữ liệu đến vector đặc trưng</h2>
+  <div class="card" style="margin-bottom:14px">
+    <h3>Nguồn tín hiệu của một người dùng u</h3>
+    <div class="formula">positive(u) = likes ∪ track_listens ∪ {engagement.completes &gt; 0} ∪ playlist_tracks
+taste(u)    = Σ_i w_i · decay(t_i) · emb(i)        w: thích 3 · nghe hết 2 · nghe 1·log(1+lượt) · skip −1
+              decay = 0.5^(số ngày / 30)            cold-start: trung bình emb của bài thuộc thể loại/nghệ sĩ chọn trong khảo sát
+CF(u, j)    = Σ_{i ∈ 50 seed gần nhất} cooc(i, j) / √(n_i · n_j)      giữ seed i lớn nhất làm "Vì bạn đã nghe X"
+P(u, j)     = σ( b + Σ_k w_k · x_k )               8 đặc trưng x_k ∈ [0,1], thứ tự cố định FEATURE_ORDER</div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <caption class="sr" style="text-align:start;padding:10px 12px;color:var(--muted)">8 đặc trưng của LR (dùng chung một module <code>@infosound/recommendation-ai/features</code> cho cả lúc train và lúc chạy thật)</caption>
+      <thead><tr><th scope="col">#</th><th scope="col">Đặc trưng</th><th scope="col">Lấy từ</th><th scope="col">Công thức</th><th scope="col">Vì sao có</th><th scope="col">Chống rò rỉ / lạm dụng</th><th scope="col">Trọng số chuẩn hoá (e5)</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><code>cf_score</code></td><td>likes, listens, completes, playlist của mọi user</td><td>CF(u,j) / max CF trong các ứng viên của u</td><td>"Người nghe giống bạn cũng nghe"</td><td>Leave-pair-out: trừ chính cặp (u,j) khỏi cooc và n_j</td><td class="ok">≈ 1.35 (mạnh nhất)</td></tr>
+        <tr><td>2</td><td><code>content_sim</code></td><td><code>track_embeddings</code> (e5, 384 chiều)</td><td>(cos(taste(u), emb(j)) + 1) / 2; bằng 0 nếu không có embedding</td><td>Hiểu nội dung, giải cold-start bài mới</td><td>Chỉ dùng embedding khớp <code>source_version</code>; văn bản cắt 256 token; không có tên thể loại</td><td class="mid">≈ 0.02 (không ổn định)</td></tr>
+        <tr><td>3</td><td><code>follows_artist</code></td><td><code>artist_follows</code></td><td>0/1</td><td>Tín hiệu trung thành rõ ràng</td><td>Follow chỉ lấy trước mốc cắt; 22% follow ngẫu nhiên trong dữ liệu mô phỏng</td><td class="ok">≈ 0.67</td></tr>
+        <tr><td>4</td><td><code>survey_match</code></td><td><code>music_preferences</code></td><td>1 nếu thể loại hoặc nghệ sĩ của bài nằm trong khảo sát</td><td>Nối với khảo sát sẵn có của nhóm</td><td>Khảo sát có nhiễu (sai một phần)</td><td>≈ 0.24</td></tr>
+        <tr><td>5</td><td><code>genre_overlap</code></td><td><code>track_genres</code> + positive(u)</td><td>|thể loại(j) ∩ top thể loại(u)| / |thể loại(j)|</td><td>Gu thể loại, dạng có cấu trúc</td><td>Top thể loại tính bỏ cặp (u,j)</td><td class="ok">≈ 0.76</td></tr>
+        <tr><td>6</td><td><code>popularity</code></td><td><code>tracks.play_count</code></td><td>log(1+play) / log(1+max play)</td><td>Tiên nghiệm phổ biến</td><td>Khi đánh giá chỉ đếm lượt nghe trước mốc cắt</td><td>≈ 0.13</td></tr>
+        <tr><td>7</td><td><code>recency</code></td><td><code>tracks.published_at</code></td><td>exp(−số ngày từ lúc phát hành / 30)</td><td>Ưu tiên bài mới</td><td>Học ra trọng số âm do thiên lệch thời gian tiếp xúc (bài mới ít lượt nghe)</td><td class="no">≈ −0.17</td></tr>
+        <tr><td>8</td><td><code>skip_rate</code></td><td><code>track_engagement</code></td><td>(số user skip + 1) / (số user bắt đầu nghe + 2)</td><td>Bài hay bị bỏ qua</td><td>Mỗi user đóng góp tối đa 1, nên spam skip không dìm được bài; khi train chỉ dùng dữ liệu trước mốc cắt</td><td>≈ 0.11</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="grid2" style="margin-top:14px">
+    <div class="card"><h3>Nhãn khi huấn luyện</h3>
+      <ul class="tight">
+        <li><b class="ok">Dương:</b> thích, hoặc nghe hết ≥ 1 lần, hoặc ≥ 2 lượt nghe hợp lệ.</li>
+        <li><b class="no">Âm:</b> skip mà không có tín hiệu dương; hiển thị mà không bấm; 4 bài ngẫu nhiên chưa nghe cho mỗi mẫu dương.</li>
+        <li>Huấn luyện bằng gradient descent có L2, chuẩn hoá đặc trưng. Model hợp lệ phải qua <code>parseModel</code> chung với serving.</li>
+      </ul></div>
+    <div class="card"><h3>Cách thu tín hiệu ngầm từ player</h3>
+      <ul class="tight">
+        <li><code>start</code>: media thật sự bắt đầu phát.</li>
+        <li><code>skip</code>: đổi bài hoặc dừng trước min(30 s, D/2). Server kiểm từ <code>startedAtMs</code> trong listen token.</li>
+        <li><code>complete</code>: đã nghe ≥ 0.6·D.</li>
+        <li>Mỗi token chỉ có 1 start và 1 sự kiện kết thúc; token cũ không replay được. Visitor không bị ghi.</li>
+      </ul></div>
+  </div>
+</section>
+
+<!-- ============ 4. EXPERIMENTS ============ -->
+<section id="p-exp" role="tabpanel" aria-labelledby="t-exp" hidden>
+  <h2>Các vòng thử nghiệm, phản biện và quyết định</h2>
+  <ol class="timeline">
+    <li style="--dot:var(--dim)"><div class="card"><h3>V0 · Bản đầu tiên (embedding băm, chia theo từng user)</h3>
+      <p>Hybrid P@5 <b>0.351</b>, CF 0.314, luật cũ 0.297, Popularity 0.058. Nhìn rất đẹp.</p>
+      <p class="verdict no">Bị loại. Review độc lập phát hiện follow được sinh từ cả lượt thích thuộc tập test (rò dữ liệu). Tập test lại là "bài ruột bị xóa" chứ không phải bài mới khám phá. Kết quả mang tính vòng tròn.</p></div></li>
+    <li style="--dot:var(--warn)"><div class="card"><h3>V1 · Sửa phương pháp: một mốc cắt chung theo thời gian</h3>
+      <ul class="tight"><li>Mốc T_c = now − 10 ngày. Test = cặp (user, bài) có lần nghe <b>đầu tiên</b> sau mốc và trở thành tích cực. Validation lùi thêm 1 tuần.</li>
+      <li>Follow và khảo sát có nhiễu. Mood thấm vào lời bài hát. Bỏ tên thể loại khỏi văn bản nhúng. Thêm phép thử hoán vị embedding. 10 seed, khoảng tin cậy theo cặp.</li></ul>
+      <p class="verdict mid">Hybrid P@5 giảm còn 0.095, ngang CF. Nhưng NDCG@5 cao hơn có ý nghĩa: +0.038 so với CF. Số thấp hơn nhưng trung thực.</p></div></li>
+    <li style="--dot:var(--warn)"><div class="card"><h3>V2 · Chuyển sang e5 thật trong stack thử nghiệm</h3>
+      <p>Bảng chính gần như không đổi. Hoán vị embedding không làm Hybrid tụt. Trọng số content_sim là 4.1 ± 12.4 (rất bất ổn).</p>
+      <p class="verdict mid">Ở warm-start, content không cho thêm tín hiệu nào ngoài CF và thể loại.</p></div></li>
+    <li style="--dot:var(--good)"><div class="card"><h3>V3 · Đánh giá cold-start: lý do content tồn tại</h3>
+      <ul class="tight"><li>Bài mới (15% phát hành sau mốc cắt): Content-only P@5 0.018 so với CF 0.000. Chênh +0.018, CI 0.011–0.026, <span class="ok">có ý nghĩa</span>. Phép thử hoán vị cũng tụt có ý nghĩa.</li>
+      <li class="no">Nhưng Hybrid 0.009 thua luật cũ 0.104 (−0.095). LR học từ dữ liệu cũ nên dựa vào cf_score, mà bài mới có cf_score = 0. Luật cũ thắng nhờ xếp bài mới nhất lên đầu.</li>
+      <li>User mới (2–3 tương tác + khảo sát): Hybrid ngang luật cũ (+0.004, CI chứa 0). Fallback không mất gì.</li></ul></div></li>
+    <li style="--dot:var(--warn)"><div class="card"><h3>V4 · Thử ô khám phá chọn theo content</h3>
+      <p>Ô số 5 lấy bài mới có content_sim cao nhất thay vì chọn ngẫu nhiên. Smoke test xác nhận chọn đúng bài cao nhất (0.9713).</p>
+      <p class="verdict mid">Không có khác biệt: −0.001 trên warm-start, −0.001 trên cold-start, +0.001 trên validation, CI đều chứa 0. Lý do: chỉ đổi 1 ô, mà pool vốn đã là bài mới. Quyết định này được đưa ra sau khi xem tập test, nên đã kiểm lại trên validation và ghi rõ trong báo cáo.</p></div></li>
+    <li style="--dot:var(--good)"><div class="card"><h3>Chốt · Giữ thiết kế, nói thẳng hạn chế</h3>
+      <p>Không tinh chỉnh thêm để tránh "tối ưu theo tập test". Hạn chế với bài mới ghi vào báo cáo, hướng phát triển là bộ xếp hạng riêng cho cold-start (kiểu Release Radar).</p></div></li>
+  </ol>
+  <h2>Phản biện độc lập đã sửa</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th scope="col">Nguồn review</th><th scope="col">Vấn đề</th><th scope="col">Đã sửa</th></tr></thead>
+    <tbody>
+      <tr><td>Backend</td><td>Spam start → skip để dìm bài; replay token cũ</td><td>Mỗi user đóng góp tối đa 1; cột <code>last_started_at_ms</code></td></tr>
+      <tr><td>Backend</td><td>Client tự tạo impression</td><td><code>impressionToken</code> ký HMAC; chỉ nhận bài đã trả; đếm DISTINCT user</td></tr>
+      <tr><td>Backend</td><td>CF quét toàn bảng; GET không có throttle</td><td>Tối đa 50 seed; 30 lần/phút cho mỗi user</td></tr>
+      <tr><td>Backend</td><td>Bài thích cũ lọt qua; embedding cũ; ô khám phá đổi trong ngày</td><td>Tải toàn bộ like; lọc theo <code>source_version</code>; đếm impression đến 0h UTC</td></tr>
+      <tr><td>Tự phản biện</td><td>Bài vừa skip vẫn được gợi ý lại (hỏng kịch bản demo)</td><td>Loại bài vừa skip (<code>SKIPPED</code>) và hiện trong panel giải thích</td></tr>
+      <tr><td>Phương pháp</td><td>Follow rò dữ liệu; test là "bài ruột"; kết quả vòng tròn; content trùng thông tin với thể loại</td><td>Mốc cắt chung, follow trước mốc, nhiễu, bỏ tên thể loại, phép thử hoán vị, CI theo cặp</td></tr>
+      <tr><td>Frontend</td><td>Phát lại đúng bài bị tính là skip; click đến trước impression; token quá 15 phút làm mất "nghe hết"; panel mất dấu mở/đóng</td><td>Bỏ qua khi phát lại; flush impression trước khi gửi click; chấp nhận token quá hạn có giới hạn; thêm chevron</td></tr>
+    </tbody></table></div>
+</section>
+
+<!-- ============ 5. RESULTS ============ -->
+<section id="p-res" role="tabpanel" aria-labelledby="t-res" hidden>
+  <h2>Kết quả cuối (e5, 10 seed, mean ± sd)</h2>
+  <div class="metrics">
+    <div class="metric"><div class="v ok">+0.039</div><div class="l">ΔNDCG@5 Hybrid − CF · CI [0.003; 0.075]</div></div>
+    <div class="metric"><div class="v ok">+0.049</div><div class="l">ΔNDCG@5 Hybrid − luật cũ · CI [0.008; 0.091]</div></div>
+    <div class="metric"><div class="v mid">−0.000</div><div class="l">ΔP@5 Hybrid − CF · CI [−0.019; 0.019]</div></div>
+    <div class="metric"><div class="v no">−0.095</div><div class="l">ΔP@5 bài mới: Hybrid − luật cũ · CI [−0.112; −0.078]</div></div>
+    <div class="metric"><div class="v ok">+0.018</div><div class="l">ΔP@5 bài mới: Content − CF · CI [0.011; 0.026]</div></div>
+    <div class="metric"><div class="v">12 / 12</div><div class="l">Smoke test HTTP (stack thử nghiệm)</div></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><h3>Warm-start (tập test)</h3>
+      <svg id="barWarm" viewBox="0 0 520 300" role="img" aria-label="Biểu đồ cột P@5 và NDCG@5 warm-start"></svg>
+    </div>
+    <div class="card"><h3>Cold-start bài mới</h3>
+      <svg id="barCold" viewBox="0 0 520 300" role="img" aria-label="Biểu đồ cột P@5 cold-start bài mới"></svg>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h3>Câu nói an toàn khi bảo vệ</h3>
+    <ul class="tight">
+      <li>"Pipeline lai ba tầng chạy đầu-cuối; lúc train và lúc chạy thật dùng chung một module đặc trưng; không rò dữ liệu qua mốc cắt thời gian."</li>
+      <li>"Hybrid không tăng số bài đúng trong top 5, nhưng xếp bài đúng lên cao hơn (NDCG +0.039 so với CF, +0.049 so với luật cũ) và phân phối gợi ý đều hơn luật cũ (Gini 0.602 so với 0.639; vẫn cao hơn CF 0.582)."</li>
+      <li>"Embedding e5 có giá trị ở bài mới, nơi CF bằng 0. Nhưng LR học từ dữ liệu cũ nên vẫn đẩy bài mới xuống: đó là hạn chế, và hướng phát triển là bộ xếp hạng riêng cho cold-start."</li>
+      <li>"Thứ tự trọng số khôi phục giả định của bộ sinh dữ liệu, không phải phát hiện; kết quả chỉ đúng dưới giả định mô phỏng."</li>
+    </ul>
+    <div class="note">Không nói: "giống Spotify", "đã chứng minh hiệu quả", "AI phân tích âm thanh", "content cải thiện gợi ý" (ở warm-start là sai).</div>
+  </div>
+</section>
+</main>
+<footer>Nguồn: <code>recommendation-ai/docs/DESIGN.md</code>, <code>docs/REPORT_NOTES.md</code>, <code>reports/eval-20261121T165118Z.md</code>. Sơ đồ tự viết, không phải bản sinh từ archify.</footer>
+
+<script>
+(() => {
+  'use strict';
+  const NS = 'http://www.w3.org/2000/svg';
+  const nodes = [
+    {id:'browser', k:'fe', x:30,  y:40,  w:200, h:70, t:'Trình duyệt', s:'Home · /recommendations · Player'},
+    {id:'gateway', k:'be', x:300, y:40,  w:170, h:70, t:'Nginx gateway', s:'HTTPS /api/v1 · CSRF/Origin'},
+    {id:'api',     k:'be', x:560, y:40,  w:230, h:70, t:'NestJS API', s:'Recommendations + RecoEngagement'},
+    {id:'t1',      k:'be', x:560, y:160, w:250, h:76, t:'Tầng 1 · Ứng viên', s:'CF · Content · Follow · Trending · Explore'},
+    {id:'t2',      k:'be', x:560, y:262, w:250, h:76, t:'Tầng 2 · Xếp hạng LR', s:'8 đặc trưng → σ(b + w·x)'},
+    {id:'t3',      k:'be', x:560, y:364, w:250, h:76, t:'Tầng 3 · Xếp lại', s:'loại · ≤1/nghệ sĩ · ô khám phá · lý do'},
+    {id:'fallback',k:'ex', x:840, y:262, w:150, h:76, t:'Luật SQL cũ', s:'fallback · Visitor preview'},
+    {id:'pg',      k:'db', x:560, y:480, w:250, h:96, t:'PostgreSQL', s:'likes · listens · follows · playlists + engagement · impressions · embeddings · models'},
+    {id:'batch',   k:'cl', x:280, y:350, w:200, h:70, t:'Batch (tools container)', s:'seed → embed → train → evaluate'},
+    {id:'model',   k:'ml', x:30,  y:350, w:200, h:70, t:'multilingual-e5-small', s:'ONNX q8 · cục bộ · 384 chiều'},
+    {id:'s3',      k:'cl', x:30,  y:190, w:200, h:70, t:'SeaweedFS', s:'audio đã ký · tone FLAC demo'},
+    {id:'report',  k:'ex', x:280, y:490, w:200, h:70, t:'Báo cáo đánh giá', s:'reports/eval-*.md'}
+  ];
+  const edges = [
+    {id:'browser-gateway', a:'browser', b:'gateway', l:'HTTPS'},
+    {id:'gateway-api', a:'gateway', b:'api', l:'/api/v1'},
+    {id:'api-t1', a:'api', b:'t1', l:'gọi engine'},
+    {id:'t1-t2', a:'t1', b:'t2', l:'≤150 ứng viên'},
+    {id:'t2-t3', a:'t2', b:'t3', l:'điểm'},
+    {id:'t3-api', a:'t3', b:'api', l:'5 bài + lý do', curve:true},
+    {id:'api-fallback', a:'api', b:'fallback', l:'null → luật cũ', dashed:true},
+    {id:'t1-pg', a:'t1', b:'pg', l:'SQL', side:true},
+    {id:'api-pg', a:'api', b:'pg', l:'ghi engagement', side2:true},
+    {id:'batch-pg', a:'batch', b:'pg', l:'owner role'},
+    {id:'batch-model', a:'batch', b:'model', l:'nhúng văn bản'},
+    {id:'batch-s3', a:'batch', b:'s3', l:'upload audio'},
+    {id:'batch-report', a:'batch', b:'report', l:'ghi báo cáo', dashed:true},
+    {id:'browser-s3', a:'browser', b:'s3', l:'phát nhạc (Range)'}
+  ];
+  const byId = Object.fromEntries(nodes.map(n => [n.id, n]));
+  const c = n => ({x:n.x+n.w/2, y:n.y+n.h/2});
+  function anchor(n, toward){
+    const cc=c(n), dx=toward.x-cc.x, dy=toward.y-cc.y;
+    if (Math.abs(dx)*n.h > Math.abs(dy)*n.w) return {x: cc.x + Math.sign(dx)*n.w/2, y: cc.y};
+    return {x: cc.x, y: cc.y + Math.sign(dy)*n.h/2};
+  }
+  const gE = document.getElementById('edges'), gN = document.getElementById('nodes');
+  const el = (t, a={}) => { const e=document.createElementNS(NS,t); for (const k in a) e.setAttribute(k,a[k]); return e; };
+  edges.forEach(e => {
+    const A=byId[e.a], B=byId[e.b];
+    let p1=anchor(A,c(B)), p2=anchor(B,c(A)), d;
+    if (e.curve){ p1={x:A.x+A.w,y:c(A).y}; p2={x:B.x+B.w,y:c(B).y+10}; d=`M${p1.x},${p1.y} C${p1.x+45},${p1.y} ${p2.x+45},${p2.y} ${p2.x},${p2.y}`; }
+    else if (e.side){ p1={x:A.x+20,y:A.y+A.h}; p2={x:B.x+20,y:B.y}; d=`M${p1.x},${p1.y} L${p2.x},${p2.y}`; }
+    else if (e.side2){ p1={x:A.x+A.w-20,y:A.y+A.h}; p2={x:B.x+B.w-20,y:B.y}; d=`M${p1.x},${p1.y} C${p1.x+120},${p1.y+120} ${p2.x+120},${p2.y-120} ${p2.x},${p2.y}`; }
+    else d=`M${p1.x},${p1.y} L${p2.x},${p2.y}`;
+    const g = el('g',{class:'edge'+(e.dashed?' dashed':''), 'data-id':e.id, 'data-a':e.a, 'data-b':e.b});
+    g.appendChild(el('path',{d, 'marker-end':'url(#ar)'}));
+    const mx=(p1.x+p2.x)/2 + (e.curve?52:e.side2?70:0), my=(p1.y+p2.y)/2 - 6;
+    const tx=el('text',{x:mx, y:my, 'text-anchor':'middle'}); tx.textContent=e.l; g.appendChild(tx);
+    gE.appendChild(g);
+  });
+  nodes.forEach(n => {
+    const g = el('g',{class:'node k-'+n.k, 'data-id':n.id});
+    g.appendChild(el('rect',{x:n.x,y:n.y,width:n.w,height:n.h,rx:12}));
+    const t=el('text',{x:n.x+14,y:n.y+26}); t.textContent=n.t; g.appendChild(t);
+    const words=n.s.split(' '); let line='', ly=n.y+46; const lines=[];
+    const maxChars=Math.floor((n.w-24)/6.6);
+    words.forEach(w=>{ if((line+' '+w).trim().length>maxChars){lines.push(line.trim()); line=w;} else line+=' '+w; }); lines.push(line.trim());
+    lines.slice(0, Math.max(1, Math.floor((n.h-40)/15))).forEach((s,i)=>{ const st=el('text',{x:n.x+14,y:ly+i*15,class:'sub'}); st.textContent=s; g.appendChild(st); });
+    const ttl=el('title'); ttl.textContent=n.t+' · '+n.s; g.appendChild(ttl);
+    gN.appendChild(g);
+  });
+
+  const flows = {
+    home: {label:'Gợi ý trang chủ', summary:'Người dùng mở Home: API chạy 3 tầng trên dữ liệu trong DB rồi trả 5 bài kèm lý do. Không có điểm số trong response.', steps:[
+      {t:'Mở trang chủ', d:'Mục "Giai điệu đề xuất" gọi API với Bearer token. Query key theo user, có thể hủy (abort).', p:['browser','gateway','api'], e:'GET /api/v1/recommendations'},
+      {t:'Nạp model và hồ sơ', d:'API nạp model LR đang active, embedding (cache 60 s), tương tác của user, khảo sát, nghệ sĩ đang theo dõi, toàn bộ like. Thiếu thứ nào thì đi nhánh fallback.', p:['api','t1','pg']},
+      {t:'Tầng 1 · Gom ứng viên', d:'CF đếm đồng xuất hiện (50 seed gần nhất), content tính cosine taste–embedding, cộng follow, trending 7 ngày, pool khám phá. Bài đã thích, nghe trong 14 ngày, vừa skip bị loại ngay trong SQL.', p:['t1','pg']},
+      {t:'Tầng 2 · Chấm điểm', d:'Mỗi ứng viên có 8 đặc trưng chuẩn hoá về [0,1], rồi P = σ(b + w·x) với trọng số trong recommendation_models.', p:['t1','t2']},
+      {t:'Tầng 3 · Xếp lại', d:'Sắp theo điểm, tối đa 1 bài mỗi nghệ sĩ, ô 5 là khám phá (bài mới có content_sim cao nhất, hòa thì theo seed user+ngày). Lý do lấy theo nguồn đóng góp nhiều nhất.', p:['t2','t3']},
+      {t:'Trả kết quả', d:'API kiểm lại quyền xem bài, trả 5 bài + reason + seedTitle + requestId + impressionToken (HMAC). private, no-store.', p:['t3','api','gateway','browser']},
+      {t:'Ghi impression', d:'Khi thẻ hiện ra (IntersectionObserver), trình duyệt gửi impression kèm token và header CSRF. Server chỉ nhận đúng các bài nó đã trả.', p:['browser','gateway','api','pg'], e:'POST /api/v1/recommendations/impressions'}
+    ]},
+    signal: {label:'Thu tín hiệu ngầm', summary:'Player gửi start/skip/complete. Server tự kiểm thời gian từ listen token có sẵn và chỉ cộng bộ đếm tổng hợp.', steps:[
+      {t:'Xin quyền phát', d:'Như luồng phát nhạc chung: API cấp URL ký số và listen token 15 phút (chứa startedAtMs).', p:['browser','gateway','api'], e:'GET /api/v1/tracks/:id/playback'},
+      {t:'Phát nhạc', d:'Audio đọc từ SeaweedFS qua URL ký số, có HTTP Range.', p:['browser','s3']},
+      {t:'Gửi start', d:'Khi media thật sự chạy, player gửi start một lần cho mỗi lần phát. Token cũ không replay được nhờ last_started_at_ms.', p:['browser','gateway','api','pg'], e:'POST /api/v1/tracks/:id/engagement {start}'},
+      {t:'Gửi skip hoặc complete', d:'Đổi bài trước min(30 s, D/2) là skip; nghe ≥ 0.6·D là complete. Server kiểm lại bằng startedAtMs. Phát lại đúng bài không bị tính là skip.', p:['browser','gateway','api','pg'], e:'POST /api/v1/tracks/:id/engagement {skip|complete}'},
+      {t:'Lần gợi ý sau', d:'Bài vừa skip bị loại (SKIPPED, hiện trong panel giải thích). skip_rate của bài chỉ tăng tối đa 1 cho mỗi user.', p:['pg','t1','t3']}
+    ]},
+    batch: {label:'Pipeline offline', summary:'Chạy theo lô trong container tools của stack chính (infosound-local). Phần nặng không nằm trên đường request.', steps:[
+      {t:'seed', d:'Sinh 200 bài, 40 nghệ sĩ, 60 người nghe thuộc 6 persona, 60 ngày hành vi từ biến ẩn có nhiễu. Audio là tone FLAC 45 s (59.5 MB) được upload thật. Dữ liệu có đánh dấu @demo.infosound.local; chạy trên DB chính phải thêm cờ --i-know-this-is-demo; gỡ bằng --reset-only.', p:['batch','pg','s3']},
+      {t:'embed', d:'passage: tiêu đề. mô tả. lời (không có tên thể loại), cắt 256 token, chạy e5 cục bộ. Ghi vector + content_hash + source_version; bỏ qua bài không đổi.', p:['batch','model','pg']},
+      {t:'train', d:'Dựng tập nhãn (dương/âm 1:4, leave-pair-out), huấn luyện LR có L2, ghi recommendation_models và kích hoạt. API dùng ngay, không cần build lại.', p:['batch','pg']},
+      {t:'evaluate', d:'Tái tạo thế giới mô phỏng trong bộ nhớ cho 10 seed, một mốc cắt chung, 7 phương pháp, ablation, phép thử hoán vị, CI theo cặp, cold-start. Ghi báo cáo .md/.json.', p:['batch','report']}
+    ]},
+    fallback: {label:'Fallback', summary:'Mọi trường hợp thiếu dữ liệu hoặc lỗi đều quay về luật SQL cũ của nhóm. Người dùng không thấy lỗi.', steps:[
+      {t:'Điều kiện', d:'Dưới 3 tương tác, chưa có model active, chưa có embedding, không có ứng viên, hoặc ném lỗi: engine trả null.', p:['api','t1']},
+      {t:'Luật cũ', d:'API gọi userRecommendationSelection: khảo sát → thể loại bài đã thích → phổ biến. requestId/impressionToken = null, nên telemetry tự tắt.', p:['api','fallback']},
+      {t:'Visitor', d:'Khách vãng lai luôn dùng POST /recommendations/preview (stateless), không bị theo dõi.', p:['browser','gateway','api','fallback'], e:'POST /api/v1/recommendations/preview'}
+    ]}
+  };
+
+  const svg = document.getElementById('map');
+  const btns = document.getElementById('flowBtns'), stepsEl = document.getElementById('steps'), sum = document.getElementById('flowSummary');
+  let cur = 'home', idx = 0;
+  function highlight(path){
+    svg.classList.toggle('dimmed', !!path);
+    svg.querySelectorAll('.node,.edge').forEach(x => x.classList.remove('on'));
+    svg.querySelectorAll('.edge path').forEach(p => p.setAttribute('marker-end','url(#ar)'));
+    if (!path) return;
+    path.forEach(id => svg.querySelector(`.node[data-id="${id}"]`)?.classList.add('on'));
+    for (let i=0;i<path.length-1;i++){
+      const a=path[i], b=path[i+1];
+      svg.querySelectorAll('.edge').forEach(g => {
+        if ((g.dataset.a===a&&g.dataset.b===b)||(g.dataset.a===b&&g.dataset.b===a)){ g.classList.add('on'); g.querySelector('path').setAttribute('marker-end','url(#arh)'); }
+      });
+    }
+  }
+  function renderFlow(){
+    const f = flows[cur]; sum.textContent = f.summary; stepsEl.innerHTML='';
+    f.steps.forEach((s,i) => {
+      const li=document.createElement('li'); const b=document.createElement('button');
+      b.type='button'; b.className='step'; if(i===idx) b.setAttribute('aria-current','step');
+      b.innerHTML=`<span class="n">${i+1}</span><span><b></b><span class="d"></span>${s.e?'<code></code>':''}</span>`;
+      b.querySelector('b').textContent=s.t; b.querySelector('.d').textContent=s.d; if(s.e) b.querySelector('code').textContent=s.e;
+      b.addEventListener('click',()=>{idx=i;renderFlow();});
+      li.appendChild(b); stepsEl.appendChild(li);
+    });
+    highlight(idx<0?null:f.steps[idx].p);
+    btns.querySelectorAll('.flow-btn').forEach(x=>x.setAttribute('aria-pressed', String(x.dataset.f===cur)));
+  }
+  Object.entries(flows).forEach(([k,f]) => {
+    const b=document.createElement('button'); b.type='button'; b.className='flow-btn'; b.dataset.f=k; b.textContent=f.label;
+    b.addEventListener('click',()=>{cur=k;idx=0;renderFlow();}); btns.appendChild(b);
+  });
+  document.getElementById('prev').onclick=()=>{idx=Math.max(0,idx-1);renderFlow();};
+  document.getElementById('next').onclick=()=>{idx=Math.min(flows[cur].steps.length-1,idx+1);renderFlow();};
+  document.getElementById('all').onclick=()=>{idx=-1;renderFlow();};
+  document.addEventListener('keydown',e=>{ if(document.getElementById('p-flow').hidden) return; if(e.target.closest('input,textarea')) return;
+    if(e.key==='ArrowRight'){document.getElementById('next').click();} if(e.key==='ArrowLeft'){document.getElementById('prev').click();} });
+  renderFlow();
+
+  // tabs
+  const tabs=[...document.querySelectorAll('.tab')];
+  tabs.forEach(t=>t.addEventListener('click',()=>{ tabs.forEach(x=>{x.setAttribute('aria-selected',String(x===t)); document.getElementById(x.getAttribute('aria-controls')).hidden = x!==t;}); }));
+  document.getElementById('theme').onclick=()=>{ const r=document.documentElement; const n=r.getAttribute('data-theme')==='dark'?'light':'dark'; r.setAttribute('data-theme',n); try{localStorage.setItem('reco-map-theme',n);}catch(_){} };
+
+  // bar charts
+  function bars(id, rows, keys, max){
+    const s=document.getElementById(id), W=520, H=300, L=150, R=20, T=16, rowH=(H-T-40)/rows.length;
+    const colors=['var(--fe-s)','var(--be-s)'];
+    rows.forEach((r,i)=>{
+      const y=T+i*rowH; const lab=el('text',{x:L-8,y:y+rowH/2+4,'text-anchor':'end',fill:'var(--text)','font-size':'12.5'}); lab.textContent=r.n; s.appendChild(lab);
+      keys.forEach((k,j)=>{ const v=r[k]; const bw=(W-L-R)*v/max, bh=(rowH-8)/keys.length;
+        const rect=el('rect',{x:L,y:y+4+j*bh,width:Math.max(1,bw),height:bh-2,rx:3,fill:colors[j],opacity:r.hl?1:.75}); s.appendChild(rect);
+        const tv=el('text',{x:L+bw+5,y:y+4+j*bh+bh-4,fill:'var(--muted)','font-size':'11'}); tv.textContent=v.toFixed(3); s.appendChild(tv); });
+    });
+    keys.forEach((k,j)=>{ const lx=L+j*120; s.appendChild(el('rect',{x:lx,y:H-18,width:12,height:12,rx:2,fill:colors[j]})); const t=el('text',{x:lx+18,y:H-8,fill:'var(--muted)','font-size':'12'}); t.textContent=k; s.appendChild(t); });
+  }
+  bars('barWarm',[
+    {n:'Hybrid',P:0.095,N:0.250,hl:1},{n:'Hybrid không khám phá',P:0.106,N:0.264},{n:'CF-only',P:0.095,N:0.211},
+    {n:'Luật SQL cũ',P:0.083,N:0.201},{n:'Content-only (e5)',P:0.018,N:0.035},{n:'Popularity',P:0.008,N:0.016}
+  ].map(r=>({n:r.n,'P@5':r.P,'NDCG@5':r.N,hl:r.hl})),['P@5','NDCG@5'],0.3);
+  bars('barCold',[
+    {n:'Luật SQL cũ',P:0.104,N:0.211},{n:'Content-only (e5)',P:0.018,N:0.039,hl:1},{n:'Hybrid',P:0.009,N:0.013},
+    {n:'CF-only',P:0.000,N:0.000},{n:'Popularity',P:0.000,N:0.000}
+  ].map(r=>({n:r.n,'P@5':r.P,'NDCG@5':r.N,hl:r.hl})),['P@5','NDCG@5'],0.25);
+})();
+</script>
+</body>
+</html>

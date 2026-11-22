@@ -1,0 +1,29 @@
+flowchart LR
+    classDef default fill:#fff,stroke:#2d2d3a,stroke-width:1.5px,color:#1f1f2b
+    U(["Người dùng đã đăng nhập,<br/>có ít nhất 3 tương tác"])
+    subgraph T1["Tầng 1 · Ứng viên (≤ 150)"]
+      direction TB
+      CF["Lọc cộng tác item-item (50)"]
+      CT["Nội dung: vector gu × embedding e5 (50)"]
+      FO["Nghệ sĩ đang theo dõi (25)"]
+      TR["Thịnh hành 7 ngày (25)"]
+      EX["Kho khám phá: chưa nghe, ít hiển thị (20)"]
+    end
+    subgraph T2["Tầng 2 · Xếp hạng"]
+      direction TB
+      FE["8 đặc trưng x ∈ [0,1]"]
+      LR["Hồi quy logistic<br/>P = σ(b + w·x)"]
+      FE --> LR
+    end
+    subgraph T3["Tầng 3 · Sắp xếp lại"]
+      direction TB
+      X1["Loại: đã thích, của chính mình,<br/>nghe trong 14 ngày, vừa bỏ qua"]
+      X2["Sắp theo điểm,<br/>tối đa 1 bài mỗi nghệ sĩ"]
+      X3["Ô thứ 5: khám phá"]
+      X4["Gắn lý do gợi ý"]
+      X1 --> X2 --> X3 --> X4
+    end
+    OUT(["5 gợi ý hoặc 4 kệ<br/>+ requestId, impressionToken"])
+    FB["Luật SQL cũ (fallback)"]
+    U --> T1 --> T2 --> T3 --> OUT
+    U -. "thiếu model, embedding,<br/>dưới 3 tương tác, lỗi" .-> FB

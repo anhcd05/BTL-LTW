@@ -1,0 +1,19 @@
+sequenceDiagram
+    actor U as Người dùng
+    participant W as Trang playlist
+    participant A as API
+    participant DB as PostgreSQL
+    U->>W: Kéo thả hoặc bấm lên, xuống để đổi thứ tự
+    W->>A: PUT /api/v1/playlists/:id/order {version, trackIds}
+    A->>A: Kiểm tra phiên đăng nhập và quyền sở hữu playlist
+    A->>DB: BEGIN, SELECT playlist ... FOR UPDATE
+    alt version khác bản trên máy chủ
+        A-->>W: 409 PLAYLIST_VERSION_CONFLICT
+        W->>A: Tải lại playlist mới nhất
+    else Tập bài gửi lên khác tập bài hiện có
+        A-->>W: 409 PLAYLIST_TRACKS_MISMATCH
+    else Hợp lệ
+        A->>DB: Cập nhật position theo thứ tự mới, version + 1, COMMIT
+        A-->>W: 200 playlist với version mới
+    end
+    W-->>U: Hiển thị thứ tự đã lưu

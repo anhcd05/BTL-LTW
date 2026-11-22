@@ -1,0 +1,30 @@
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="common.css"><style>
+.g{display:grid;grid-template-columns:2.2fr 1fr;gap:18px}
+.r{display:flex;gap:12px;justify-content:center}
+.r .box{flex:1}
+.v{text-align:center;font-size:15px;color:#333;margin:6px 0}
+</style></head><body>
+<div class="g">
+<div>
+ <div class="grp"><h3>Trình duyệt (Next.js)</h3><div class="r">
+  <div class="box">Trang chủ<br/>“Giai điệu đề xuất”</div><div class="box">Trang Gợi ý<br/>các kệ + panel Giải thích</div><div class="box">Trình phát<br/>start · skip · complete</div></div></div>
+ <div class="v">HTTPS qua SafeLine WAF và Nginx · <code>/api/v1/recommendations…</code> · <code>/tracks/:id/engagement</code> ↓</div>
+ <div class="grp"><h3>API (NestJS)</h3><div class="r">
+  <div class="box">RecommendationsController<br/><span class="small">throttle 30/phút · private, no-store</span></div>
+  <div class="box">Gói <code>recommendation-ai</code><br/>Tầng 1 → Tầng 2 → Tầng 3</div>
+  <div class="box" style="border-style:dashed">Luật SQL cũ<br/><span class="small">fallback</span></div>
+  <div class="box">RecoEngagementController<br/><span class="small">kiểm thời gian, token HMAC</span></div></div></div>
+ <div class="v">SQL tham số hóa (role <code>infosound_api</code>: chỉ đọc model và vector, ghi tín hiệu) ↓</div>
+ <div class="grp"><h3>PostgreSQL</h3><div class="r">
+  <div class="box">Dữ liệu sẵn có<br/><span class="small">likes, listens, playlists, follows, khảo sát</span></div>
+  <div class="box">Tín hiệu mới<br/><span class="small">track_engagement, recommendation_impressions</span></div>
+  <div class="box">Tri thức mô hình<br/><span class="small">track_embeddings, recommendation_models</span></div></div></div>
+</div>
+<div class="grp" style="display:flex;flex-direction:column;gap:8px"><h3>Batch ngoại tuyến<br/><span class="small">container tools, role owner</span></h3>
+ <div class="box">seed<br/><span class="small">dữ liệu mô phỏng (chỉ demo)</span></div><div class="arrow">↓</div>
+ <div class="box">embed<br/><span class="small">multilingual-e5-small, ONNX cục bộ</span></div><div class="arrow">↓</div>
+ <div class="box">train<br/><span class="small">hồi quy logistic, kích hoạt model mới</span></div><div class="arrow">↓</div>
+ <div class="box">evaluate<br/><span class="small">P@5, NDCG@5, Coverage, Gini</span></div>
+ <div class="v">← đọc dữ liệu hành vi, ghi vector và model vào PostgreSQL</div>
+</div>
+</div></body></html>

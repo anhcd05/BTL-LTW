@@ -1,0 +1,21 @@
+sequenceDiagram
+    actor O as Người vận hành
+    participant T as Container tools
+    participant DB as PostgreSQL
+    participant S as Kho S3
+    O->>T: RECO_DEMO=1 node cli.js seed --i-know-this-is-demo
+    T->>DB: Tạo nghệ sĩ, bài, người nghe mô phỏng (@demo.infosound.local) và 60 ngày hành vi
+    T->>S: Tải FLAC 45 giây cho mỗi bài mô phỏng
+    O->>T: cli.js embed
+    T->>DB: Đọc tiêu đề, mô tả, 4 dòng lời đầu của bài công khai
+    T->>T: Bỏ qua bài có content_hash không đổi, nhúng bằng multilingual-e5-small (cắt 256 token)
+    T->>DB: Ghi track_embeddings (384 chiều, source_version)
+    O->>T: cli.js train
+    T->>DB: Đọc likes, listens, track_engagement, impressions, playlists
+    T->>T: Dựng mẫu dương, âm và 8 đặc trưng, huấn luyện hồi quy logistic
+    T->>T: Đo AUC trên 7 ngày gần nhất, rồi huấn luyện lại trên toàn bộ
+    T->>DB: Một giao dịch: tắt model cũ, chèn model mới với active = true
+    Note over DB: API đọc model active ở yêu cầu kế tiếp, không cần build lại
+    O->>T: cli.js evaluate --seeds 42..51
+    T->>T: Mô phỏng trong bộ nhớ, so sánh các phương pháp
+    T-->>O: reports/eval-*.md và .json

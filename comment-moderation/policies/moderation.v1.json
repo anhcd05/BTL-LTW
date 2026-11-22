@@ -1,0 +1,6 @@
+{
+  "version":"moderation.v1",
+  "labels":["harassment","hate","threat","sexual","spam","scam","privacy","profanity"],
+  "holdLabels":["harassment","hate","threat","sexual","spam","scam","privacy"],
+  "reasonCodes":["NO_VIOLATION","ARTISTIC_CRITICISM","PROFANITY_CONTEXTUAL","TARGETED_HARASSMENT","HATE_TARGETING_GROUP","VIOLENT_THREAT","SEXUAL_CONTENT","PROMOTIONAL_SPAM","SCAM_SOLICITATION","PRIVATE_DATA_EXPOSURE","AMBIGUOUS_CONTEXT"]
+}

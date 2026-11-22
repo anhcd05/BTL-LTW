@@ -1,0 +1,579 @@
+{
+    "schema_version":  1,
+    "diagram_type":  "sequence",
+    "meta":  {
+                 "title":  "InfoSound · Từ tải nhạc đến phát hành",
+                 "output":  ".archify/architecture-infosound-20261121-191427/tai-nhac/tai-nhac.html",
+                 "quality_profile":  "showcase",
+                 "repository":  {
+                                    "url":  "git@gitlab.com:5pidey/int1434.git",
+                                    "revision":  "74f90f2a07e41bb532d2f31831edb66ab7a6a73c",
+                                    "link_mode":  "local-only"
+                                },
+                 "locale":  "vi",
+                 "translations":  {
+                                      "page.title":  "Sơ đồ {title}",
+                                      "diagram.description.architecture":  "Sơ đồ kiến trúc InfoSound.",
+                                      "diagram.description.sequence":  "Sơ đồ tuần tự của InfoSound.",
+                                      "node.focus":  "Xem {label}",
+                                      "node.focus.detail":  "Xem {label}, {detail}",
+                                      "node.context.architecture":  "Thành phần hệ thống",
+                                      "node.context.sequence":  "Thành phần tham gia",
+                                      "legend.title":  "Chú giải",
+                                      "legend.sequence.emphasis":  "Yêu cầu chính",
+                                      "legend.sequence.return":  "Phản hồi",
+                                      "legend.sequence.security":  "Kiểm tra quyền",
+                                      "legend.sequence.dashed":  "Bất đồng bộ",
+                                      "legend.sequence.default":  "Thông điệp",
+                                      "viewer.theme.dark":  "Tối",
+                                      "viewer.theme.light":  "Sáng",
+                                      "viewer.theme.toggle":  "Đổi giao diện sáng/tối",
+                                      "viewer.theme.toggle.title":  "Đổi giao diện (T)",
+                                      "viewer.preset.style":  "Kiểu",
+                                      "viewer.preset.choose":  "Chọn kiểu hiển thị",
+                                      "viewer.preset.classic":  "Cổ điển",
+                                      "viewer.preset.classic.short":  "Cổ điển",
+                                      "viewer.motion.live":  "Động",
+                                      "viewer.motion.still":  "Tĩnh",
+                                      "viewer.motion.pause":  "Dừng chuyển động",
+                                      "viewer.motion.resume":  "Bật chuyển động",
+                                      "viewer.present.present":  "Trình chiếu",
+                                      "viewer.present.exit.label":  "Thoát",
+                                      "viewer.present.enter":  "Bật trình chiếu",
+                                      "viewer.present.enter.title":  "Trình chiếu (F)",
+                                      "viewer.present.exit":  "Thoát trình chiếu",
+                                      "viewer.present.exit.title":  "Thoát trình chiếu (F hoặc Esc)",
+                                      "viewer.export.button":  "Xuất",
+                                      "viewer.export.button.title":  "Xuất sơ đồ (E)",
+                                      "viewer.export.diagram":  "Xuất sơ đồ",
+                                      "viewer.export.menu":  "Xuất",
+                                      "viewer.export.subtitle":  "Chọn định dạng tệp",
+                                      "viewer.export.image":  "Hình ảnh",
+                                      "viewer.export.share":  "Chia sẻ",
+                                      "viewer.export.copyDiagram":  "Sao chép sơ đồ",
+                                      "viewer.export.raster":  "Ảnh raster",
+                                      "viewer.export.lossless":  "Ảnh nén không mất dữ liệu",
+                                      "viewer.export.editable":  "Ảnh vector có thể chỉnh sửa",
+                                      "viewer.export.vectorMotion":  "Vector và chuyển động",
+                                      "viewer.export.vectorMotion.heading":  "Vector và chuyển động",
+                                      "viewer.outline.title":  "Danh mục thành phần",
+                                      "viewer.rail.show":  "Ghi chú và danh mục",
+                                      "viewer.rail.controls":  "Bảng bên",
+                                      "viewer.rail.collapse":  "Thu gọn bảng",
+                                      "viewer.rail.bottom":  "Đưa bảng xuống dưới",
+                                      "viewer.rail.right":  "Đưa bảng sang bên",
+                                      "viewer.guide.title":  "Khám phá hệ thống",
+                                      "viewer.guide.eyebrow":  "Hướng dẫn",
+                                      "viewer.guide.close":  "Đóng hướng dẫn",
+                                      "viewer.guide.open":  "Mở hướng dẫn",
+                                      "viewer.guide.find":  "Tìm thành phần",
+                                      "viewer.guide.route":  "Theo dõi đường đi",
+                                      "viewer.guide.map":  "Xem toàn bộ hệ thống",
+                                      "viewer.guide.lens":  "So sánh vai trò",
+                                      "viewer.guide.present":  "Bật trình chiếu",
+                                      "viewer.guide.shortcuts":  "Phím tắt",
+                                      "viewer.nav.controls":  "Điều khiển sơ đồ",
+                                      "viewer.nav.route":  "Theo dõi đường đi",
+                                      "viewer.nav.route.title":  "Theo dõi đường đi (R)",
+                                      "viewer.nav.route.short":  "ĐƯỜNG ĐI",
+                                      "viewer.nav.radar":  "Mở bản đồ",
+                                      "viewer.nav.radar.title":  "Bản đồ (M)",
+                                      "viewer.nav.radar.short":  "BẢN ĐỒ",
+                                      "viewer.nav.lens":  "So sánh các vai trò",
+                                      "viewer.nav.lens.title":  "So sánh vai trò (L)",
+                                      "viewer.nav.lens.short":  "VAI TRÒ",
+                                      "viewer.nav.find":  "Tìm thành phần",
+                                      "viewer.nav.find.title":  "Tìm thành phần (/)",
+                                      "viewer.nav.guide":  "Xem hướng dẫn",
+                                      "viewer.nav.guide.title":  "Hướng dẫn (?)",
+                                      "viewer.nav.zoomOut":  "Thu nhỏ",
+                                      "viewer.nav.zoomOut.title":  "Thu nhỏ (-)",
+                                      "viewer.nav.reset":  "Đặt lại góc nhìn",
+                                      "viewer.nav.reset.title":  "Đặt lại góc nhìn (0)",
+                                      "viewer.nav.zoomIn":  "Phóng to",
+                                      "viewer.nav.zoomIn.title":  "Phóng to (+)",
+                                      "viewer.nav.read":  "ĐỌC",
+                                      "viewer.nav.level.map":  "BẢN ĐỒ",
+                                      "viewer.nav.level.read":  "ĐỌC",
+                                      "viewer.nav.level.full":  "CHI TIẾT",
+                                      "viewer.nav.level.auto":  "TỰ ĐỘNG",
+                                      "viewer.nav.detail.full":  "Xem đầy đủ chi tiết",
+                                      "viewer.route.eyebrow":  "Đường đi",
+                                      "viewer.route.start":  "Chọn thành phần bắt đầu",
+                                      "viewer.route.start.find":  "Tìm điểm đầu",
+                                      "viewer.route.pickTwo":  "Chọn hai thành phần trên sơ đồ",
+                                      "viewer.route.pickOne":  "Chọn một thành phần trên sơ đồ",
+                                      "viewer.route.instructions":  "Chọn điểm đầu, rồi chọn điểm cuối. Đường đi theo chiều mũi tên.",
+                                      "viewer.route.destination":  "Đường đi từ {label} kết thúc ở đâu?",
+                                      "viewer.route.destination.find":  "Tìm điểm cuối",
+                                      "viewer.route.clear":  "Xóa",
+                                      "viewer.route.journey":  "Hành trình",
+                                      "viewer.route.overview":  "Tổng quan",
+                                      "viewer.route.pause.label":  "Tạm dừng",
+                                      "viewer.route.replay.label":  "Phát lại",
+                                      "viewer.finder.title":  "Tìm thành phần",
+                                      "viewer.finder.placeholder":  "Nhập tên hoặc mã thành phần",
+                                      "viewer.finder.empty":  "Không có kết quả",
+                                      "viewer.finder.results":  "Thành phần trong sơ đồ",
+                                      "viewer.finder.result.focus":  "Xem {label}",
+                                      "viewer.passport.eyebrow":  "Chi tiết thành phần",
+                                      "viewer.passport.metadata":  "Thông tin thành phần",
+                                      "viewer.passport.evidence":  "Bằng chứng từ mã nguồn",
+                                      "viewer.passport.verified":  "Đã đối chiếu mã nguồn",
+                                      "viewer.passport.verificationScope":  "Đã đối chiếu với phiên bản Git cục bộ được ghi trên sơ đồ.",
+                                      "viewer.passport.relations":  "Liên kết",
+                                      "viewer.passport.upstream":  "Đầu vào",
+                                      "viewer.passport.downstream":  "Đầu ra",
+                                      "viewer.passport.reach":  "Phạm vi kết nối",
+                                      "viewer.passport.close":  "Đóng chi tiết thành phần",
+                                      "viewer.passport.copy":  "Sao chép liên kết",
+                                      "viewer.passport.sourceCount.one":  "{count} tham chiếu mã nguồn",
+                                      "viewer.passport.sourceCount.other":  "{count} tham chiếu mã nguồn",
+                                      "viewer.passport.relationship.summary":  "{out} đi ra · {in} đi vào{loops}",
+                                      "viewer.passport.relationship.show.one":  "Xem {count} liên kết",
+                                      "viewer.passport.relationship.show.other":  "Xem {count} liên kết",
+                                      "viewer.common.copyLink":  "Sao chép liên kết",
+                                      "viewer.common.clear":  "Xóa",
+                                      "viewer.common.close":  "Đóng",
+                                      "viewer.common.copied":  "Đã sao chép",
+                                      "viewer.common.copyFailed":  "Không sao chép được",
+                                      "legend.architecture.frontend":  "Giao diện",
+                                      "viewer.kind.frontend":  "Giao diện",
+                                      "legend.architecture.backend":  "Xử lý nghiệp vụ",
+                                      "viewer.kind.backend":  "Xử lý nghiệp vụ",
+                                      "legend.architecture.database":  "Cơ sở dữ liệu",
+                                      "viewer.kind.database":  "Cơ sở dữ liệu",
+                                      "legend.architecture.cloud":  "Kho đối tượng",
+                                      "viewer.kind.cloud":  "Kho đối tượng",
+                                      "legend.architecture.security":  "Bảo vệ",
+                                      "viewer.kind.security":  "Bảo vệ",
+                                      "legend.architecture.messagebus":  "Hàng đợi",
+                                      "viewer.kind.messagebus":  "Hàng đợi",
+                                      "legend.architecture.external":  "Bên ngoài",
+                                      "viewer.kind.external":  "Bên ngoài"
+                                  }
+             },
+    "participants":  [
+                         {
+                             "id":  "studio",
+                             "label":  "Studio",
+                             "sublabel":  "Trình duyệt",
+                             "type":  "frontend",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/apps/web/features/studio/new-track.tsx",
+                                                 "line":  131,
+                                                 "end_line":  162,
+                                                 "label":  "Gửi thông tin và tải tệp"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/web/features/studio/edit-track.tsx",
+                                                 "line":  50,
+                                                 "end_line":  64,
+                                                 "label":  "Theo dõi quá trình xử lý"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/web/features/studio/edit-track.tsx",
+                                                 "line":  229,
+                                                 "end_line":  235,
+                                                 "label":  "Nghệ sĩ chọn phát hành"
+                                             }
+                                         ]
+                         },
+                         {
+                             "id":  "api",
+                             "label":  "API",
+                             "sublabel":  "NestJS",
+                             "type":  "backend",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/apps/api/src/features/tracks/tracks.controller.ts",
+                                                 "line":  345,
+                                                 "end_line":  395,
+                                                 "label":  "Tạo phiên và ký URL"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/api/src/features/tracks/tracks.controller.ts",
+                                                 "line":  465,
+                                                 "end_line":  538,
+                                                 "label":  "Chốt nguồn và ghi công việc"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/api/src/features/tracks/tracks.controller.ts",
+                                                 "line":  767,
+                                                 "end_line":  794,
+                                                 "label":  "Điều kiện phát hành"
+                                             }
+                                         ]
+                         },
+                         {
+                             "id":  "s3",
+                             "label":  "SeaweedFS",
+                             "sublabel":  "Kho tệp S3",
+                             "type":  "database",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/packages/storage/src/index.ts",
+                                                 "line":  48,
+                                                 "end_line":  56,
+                                                 "label":  "URL tải vào vùng tạm"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/api/src/features/tracks/tracks.controller.ts",
+                                                 "line":  468,
+                                                 "end_line":  492,
+                                                 "label":  "Sao chép đúng phiên bản"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/audio-worker/src/process-audio-task.ts",
+                                                 "line":  161,
+                                                 "end_line":  172,
+                                                 "label":  "Ghi tệp phát vào kho"
+                                             }
+                                         ]
+                         },
+                         {
+                             "id":  "db",
+                             "label":  "PostgreSQL",
+                             "sublabel":  "Bài, task, outbox",
+                             "type":  "database",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/apps/api/src/features/tracks/tracks.controller.ts",
+                                                 "line":  496,
+                                                 "end_line":  538,
+                                                 "label":  "Giao dịch tạo công việc"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/audio-worker/src/process-audio-task.ts",
+                                                 "line":  174,
+                                                 "end_line":  196,
+                                                 "label":  "Chỉ chốt tác vụ còn hiệu lực"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/background-worker/src/main.ts",
+                                                 "line":  111,
+                                                 "end_line":  125,
+                                                 "label":  "Ghi thông báo phát hành"
+                                             }
+                                         ]
+                         },
+                         {
+                             "id":  "bg",
+                             "label":  "Worker nền",
+                             "sublabel":  "Điều phối",
+                             "type":  "backend",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/apps/background-worker/src/main.ts",
+                                                 "line":  98,
+                                                 "end_line":  108,
+                                                 "label":  "Đưa task vào hàng đợi"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/background-worker/src/main.ts",
+                                                 "line":  211,
+                                                 "end_line":  235,
+                                                 "label":  "Nhận sự kiện từ outbox"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/background-worker/src/main.ts",
+                                                 "line":  111,
+                                                 "end_line":  125,
+                                                 "label":  "Chọn người đã bật chuông"
+                                             }
+                                         ]
+                         },
+                         {
+                             "id":  "mq",
+                             "label":  "BullMQ",
+                             "sublabel":  "Redis",
+                             "type":  "messagebus",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/apps/background-worker/src/main.ts",
+                                                 "line":  98,
+                                                 "end_line":  108,
+                                                 "label":  "Ghi job process"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/audio-worker/src/main.ts",
+                                                 "line":  61,
+                                                 "end_line":  82,
+                                                 "label":  "Audio worker nhận job"
+                                             }
+                                         ]
+                         },
+                         {
+                             "id":  "audio",
+                             "label":  "Worker âm thanh",
+                             "sublabel":  "FFmpeg",
+                             "type":  "backend",
+                             "sources":  [
+                                             {
+                                                 "path":  "infosound/apps/audio-worker/src/process-audio-task.ts",
+                                                 "line":  25,
+                                                 "end_line":  61,
+                                                 "label":  "Giữ quyền xử lý tác vụ"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/audio-worker/src/process-audio-task.ts",
+                                                 "line":  90,
+                                                 "end_line":  148,
+                                                 "label":  "Đọc và xử lý nguồn"
+                                             },
+                                             {
+                                                 "path":  "infosound/apps/audio-worker/src/process-audio-task.ts",
+                                                 "line":  174,
+                                                 "end_line":  260,
+                                                 "label":  "Chốt tệp phát và waveform"
+                                             }
+                                         ]
+                         }
+                     ],
+    "segments":  [
+                     {
+                         "from":  149,
+                         "to":  377,
+                         "label":  "Tải nguồn"
+                     },
+                     {
+                         "from":  392,
+                         "to":  660,
+                         "label":  "Xử lý nền"
+                     },
+                     {
+                         "from":  676,
+                         "to":  841,
+                         "label":  "Phát hành"
+                     }
+                 ],
+    "messages":  [
+                     {
+                         "id":  "begin",
+                         "from":  "studio",
+                         "to":  "api",
+                         "y":  170,
+                         "label":  "Xin phiên tải",
+                         "variant":  "emphasis"
+                     },
+                     {
+                         "id":  "reserve",
+                         "from":  "api",
+                         "to":  "db",
+                         "y":  199,
+                         "label":  "Tạo bản nháp và phiên tải",
+                         "variant":  "default"
+                     },
+                     {
+                         "id":  "signed",
+                         "from":  "api",
+                         "to":  "studio",
+                         "y":  228,
+                         "label":  "URL ký cho PUT",
+                         "variant":  "return"
+                     },
+                     {
+                         "id":  "put",
+                         "from":  "studio",
+                         "to":  "s3",
+                         "y":  257,
+                         "label":  "PUT tệp vào vùng tạm",
+                         "variant":  "emphasis"
+                     },
+                     {
+                         "id":  "complete",
+                         "from":  "studio",
+                         "to":  "api",
+                         "y":  286,
+                         "label":  "Chốt phiên tải",
+                         "variant":  "default"
+                     },
+                     {
+                         "id":  "seal",
+                         "from":  "api",
+                         "to":  "s3",
+                         "y":  315,
+                         "label":  "Chốt bản gốc",
+                         "variant":  "default"
+                     },
+                     {
+                         "id":  "commit",
+                         "from":  "api",
+                         "to":  "db",
+                         "y":  344,
+                         "label":  "Ghi nguồn, task và outbox",
+                         "variant":  "emphasis"
+                     },
+                     {
+                         "id":  "queued",
+                         "from":  "api",
+                         "to":  "studio",
+                         "y":  372,
+                         "label":  "Đã xếp hàng",
+                         "variant":  "return"
+                     },
+                     {
+                         "id":  "poll",
+                         "from":  "bg",
+                         "to":  "db",
+                         "y":  420,
+                         "label":  "Đọc outbox",
+                         "variant":  "default"
+                     },
+                     {
+                         "id":  "dispatch",
+                         "from":  "bg",
+                         "to":  "mq",
+                         "y":  453,
+                         "label":  "Gửi mã task",
+                         "variant":  "dashed"
+                     },
+                     {
+                         "id":  "job",
+                         "from":  "mq",
+                         "to":  "audio",
+                         "y":  486,
+                         "label":  "Giao việc",
+                         "variant":  "dashed"
+                     },
+                     {
+                         "id":  "lock",
+                         "from":  "audio",
+                         "to":  "db",
+                         "y":  519,
+                         "label":  "Nhận lease, ghi PROCESSING",
+                         "variant":  "default"
+                     },
+                     {
+                         "id":  "source",
+                         "from":  "audio",
+                         "to":  "s3",
+                         "y":  552,
+                         "label":  "GET phiên bản nguồn đã chốt",
+                         "variant":  "default"
+                     },
+                     {
+                         "id":  "output",
+                         "from":  "audio",
+                         "to":  "s3",
+                         "y":  585,
+                         "label":  "Xử lý xong, PUT bản phát",
+                         "variant":  "emphasis"
+                     },
+                     {
+                         "id":  "finalize",
+                         "from":  "audio",
+                         "to":  "db",
+                         "y":  618,
+                         "label":  "Gắn tệp đã xác minh, ghi READY",
+                         "variant":  "emphasis"
+                     },
+                     {
+                         "id":  "status",
+                         "from":  "studio",
+                         "to":  "api",
+                         "y":  650,
+                         "label":  "Hỏi trạng thái",
+                         "variant":  "default"
+                     },
+                     {
+                         "id":  "ready",
+                         "from":  "api",
+                         "to":  "studio",
+                         "y":  700,
+                         "label":  "READY",
+                         "variant":  "return"
+                     },
+                     {
+                         "id":  "publish",
+                         "from":  "studio",
+                         "to":  "api",
+                         "y":  731,
+                         "label":  "Phát hành",
+                         "variant":  "emphasis"
+                     },
+                     {
+                         "id":  "release",
+                         "from":  "api",
+                         "to":  "db",
+                         "y":  762,
+                         "label":  "Ghi PUBLISHED và lần phát hành đầu",
+                         "variant":  "emphasis"
+                     },
+                     {
+                         "id":  "read-release",
+                         "from":  "bg",
+                         "to":  "db",
+                         "y":  793,
+                         "label":  "Đọc RELEASE",
+                         "variant":  "default"
+                     },
+                     {
+                         "id":  "notify",
+                         "from":  "bg",
+                         "to":  "db",
+                         "y":  824,
+                         "label":  "Ghi thông báo",
+                         "variant":  "dashed"
+                     }
+                 ],
+    "activations":  [
+                        {
+                            "participant":  "api",
+                            "from":  282,
+                            "to":  374,
+                            "type":  "backend"
+                        },
+                        {
+                            "participant":  "bg",
+                            "from":  417,
+                            "to":  456,
+                            "type":  "backend"
+                        },
+                        {
+                            "participant":  "audio",
+                            "from":  482,
+                            "to":  622,
+                            "type":  "backend"
+                        },
+                        {
+                            "participant":  "api",
+                            "from":  728,
+                            "to":  766,
+                            "type":  "backend"
+                        },
+                        {
+                            "participant":  "bg",
+                            "from":  790,
+                            "to":  828,
+                            "type":  "backend"
+                        }
+                    ],
+    "cards":  [
+                  {
+                      "dot":  "cyan",
+                      "title":  "Tệp đi qua cổng media",
+                      "items":  [
+                                    "Studio gọi POST /tracks/uploads, gửi tệp bằng URL ký rồi gọi POST /uploads/:id/complete. Các route dùng tiền tố /api/v1.",
+                                    "SeaweedFS giữ bản gốc ở audio-originals. API kiểm phiên bản và ETag trước khi chốt nguồn."
+                                ]
+                  },
+                  {
+                      "dot":  "amber",
+                      "title":  "Nếu worker gặp lỗi",
+                      "items":  [
+                                    "Sự kiện AUDIO_PROCESS nằm cùng giao dịch với bản gốc và task. Worker nền có thể cấp lại job từ dữ liệu PostgreSQL.",
+                                    "Worker âm thanh kiểm tra lease, mã lần chạy và phiên bản nguồn. Lỗi tạm được thử lại có giới hạn, lỗi cuối đưa bài về FAILED."
+                                ]
+                  },
+                  {
+                      "dot":  "emerald",
+                      "title":  "Khi nào người nghe thấy bài?",
+                      "items":  [
+                                    "READY nghĩa là bản phát đã xử lý xong. POST /tracks/:id/publish chỉ thành công khi người gửi sở hữu bài và tệp hiện tại đã được xác minh.",
+                                    "Lần phát hành đầu tạo sự kiện RELEASE. Worker nền ghi thông báo cho người đã theo dõi và bật chuông từ thời điểm phù hợp."
+                                ]
+                  }
+              ]
+}

@@ -1,0 +1,7 @@
+body{margin:30px;font-family:"Segoe UI",Arial,sans-serif;color:#1f1f2b;background:#fff;width:1400px}
+.box{border:1.6px solid #2d2d3a;padding:10px 14px;background:#fff;text-align:center;font-size:17px;line-height:1.35}
+.grp{border:1.6px dashed #6b6b7a;padding:12px;border-radius:6px}
+.grp>h3{margin:0 0 10px;font-size:18px;text-align:center}
+.arrow{display:flex;align-items:center;justify-content:center;font-size:34px;color:#2d2d3a}
+.small{font-size:15px;color:#444}
+code{font-family:Consolas,monospace;font-size:15px}

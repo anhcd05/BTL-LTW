@@ -1,0 +1,20 @@
+sequenceDiagram
+    actor U as Người dùng
+    participant L as Layout gốc (PlayerProvider)
+    participant Q as Hàng đợi (trình duyệt)
+    participant A as API
+    participant M as Cổng media
+    U->>L: Bấm Phát một bài hoặc Phát playlist
+    L->>Q: playQueue(danh sách, vị trí bắt đầu)
+    L->>A: GET /api/v1/tracks/:id/playback
+    A-->>L: URL media ký số + listen token
+    L->>M: Tải âm thanh qua HTTPS (HTTP Range)
+    M-->>L: 206 Partial Content
+    U->>L: Chuyển sang trang khác trong ứng dụng
+    Note over L: Phần tử audio nằm ở layout gốc nên không bị gỡ, nhạc vẫn phát
+    U->>Q: Thêm bài, kéo thả, xóa, trộn
+    Q->>Q: enqueue (bỏ trùng, tối đa 500 bài), reorder, remove, shuffle
+    Note over Q: Chỉ đổi trạng thái phía trình duyệt, không gọi API
+    L->>L: Sự kiện ended, chọn bài kế theo chế độ lặp (tắt, lặp danh sách, lặp một bài)
+    L->>A: GET /api/v1/tracks/:id/playback cho bài kế tiếp
+    A-->>L: URL ký số mới + listen token mới

@@ -1,0 +1,36 @@
+flowchart TB
+    classDef default fill:#fff,stroke:#2d2d3a,stroke-width:1.5px,color:#1f1f2b
+    subgraph WEB["Web (Next.js)"]
+      direction LR
+      H["Trang chủ: Giai điệu đề xuất"]
+      R["Trang Gợi ý: các kệ + Giải thích"]
+      P["Trình phát: start, skip, complete"]
+    end
+    subgraph API["API (NestJS)"]
+      direction LR
+      C["RecommendationsController"]
+      G["RecoEngagementController"]
+      E["recommendation-ai<br/>Tầng 1 → 2 → 3"]
+      F["Luật SQL cũ"]
+      C --> E
+      E -. "fallback" .-> F
+    end
+    subgraph DB["PostgreSQL"]
+      direction LR
+      D1["Dữ liệu sẵn có: likes, listens,<br/>playlists, follows, khảo sát"]
+      D2["Tín hiệu mới: track_engagement,<br/>recommendation_impressions"]
+      D3["Tri thức mô hình: track_embeddings,<br/>recommendation_models"]
+    end
+    subgraph BATCH["Batch ngoại tuyến (container tools)"]
+      direction LR
+      B1["seed"] --> B2["embed (e5-small)"] --> B3["train (LR)"] --> B4["evaluate"]
+    end
+    H --> C
+    R --> C
+    P --> G
+    E -- "đọc" --> D1
+    E -- "đọc" --> D3
+    G -- "ghi" --> D2
+    D1 -- "dữ liệu huấn luyện" --> BATCH
+    D2 -- "dữ liệu huấn luyện" --> BATCH
+    BATCH -- "ghi vector, model active" --> D3

@@ -1,0 +1,78 @@
+ARG NODE_IMAGE
+FROM ${NODE_IMAGE} AS build
+RUN apt-get update && apt-get install -y --no-install-recommends gcc libc6-dev ffmpeg python3 openssl && rm -rf /var/lib/apt/lists/*
+WORKDIR /repo/infosound
+RUN ln -s /repo/infosound /workspace
+ENV PNPM_HOME=/pnpm PATH=/pnpm:$PATH NODE_OPTIONS=--max-old-space-size=2048
+RUN npm install --global pnpm@10.34.9
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml tsconfig.base.json ./
+COPY packages/database/package.json ./packages/database/package.json
+COPY packages/contracts/package.json ./packages/contracts/package.json
+COPY packages/storage/package.json ./packages/storage/package.json
+COPY apps/api/package.json ./apps/api/package.json
+COPY apps/audio-worker/package.json ./apps/audio-worker/package.json
+COPY apps/background-worker/package.json ./apps/background-worker/package.json
+COPY --from=comment_moderation package.json /repo/comment-moderation/package.json
+# AI recommendation packages (DESIGN.md section 5). The batch manifest is installed here so one frozen
+# lockfile covers the workspace; the batch package itself is only built into the tools target.
+COPY --from=recommendation_ai package.json /repo/recommendation-ai/package.json
+COPY --from=recommendation_ai batch/package.json /repo/recommendation-ai/batch/package.json
+RUN --mount=type=cache,id=infosound-pnpm,target=/pnpm/store pnpm config set store-dir /pnpm/store && pnpm install --frozen-lockfile
+COPY packages ./packages
+COPY apps/api ./apps/api
+COPY apps/audio-worker ./apps/audio-worker
+COPY apps/background-worker ./apps/background-worker
+COPY --from=comment_moderation . /repo/comment-moderation
+COPY --from=recommendation_ai tsconfig.json /repo/recommendation-ai/tsconfig.json
+COPY --from=recommendation_ai src /repo/recommendation-ai/src
+COPY scripts/bootstrap-host.sh scripts/preflight.sh scripts/doctor.sh scripts/compose.sh scripts/init-data.mjs scripts/init-secrets.py scripts/local_origin.py scripts/render-config.py scripts/build.sh scripts/up.sh scripts/resume.sh scripts/lock.sh scripts/storage-bootstrap.ts scripts/safe-logs.py scripts/backup.sh scripts/backup-manifest.sql scripts/restore-test.sh scripts/verify-restore.mjs ./scripts/
+COPY infra/audio-parser ./infra/audio-parser
+COPY infra/image-parser ./infra/image-parser
+RUN cc -O2 -Wall -Wextra -Werror -o /usr/local/bin/infosound-parser infra/audio-parser/landlock.c
+RUN cc -O2 -Wall -Wextra -Werror -o /usr/local/bin/infosound-image-parser infra/image-parser/landlock.c
+RUN pnpm --filter @infosound/database generate
+RUN pnpm --filter @infosound/contracts build && pnpm --filter @infosound/database build && pnpm --filter @infosound/storage build
+RUN pnpm --filter @infosound/comment-moderation build
+RUN pnpm --filter @infosound/recommendation-ai build
+RUN pnpm --filter @infosound/api build && pnpm --filter @infosound/audio-worker build && pnpm --filter @infosound/background-worker build
+
+FROM build AS package
+ARG APP=api
+RUN --mount=type=cache,id=infosound-pnpm,target=/pnpm/store pnpm --filter @infosound/${APP} --prod deploy --offline --frozen-lockfile /output
+
+FROM ${NODE_IMAGE} AS runtime
+ARG APP=api
+RUN apt-get update && apt-get install -y --no-install-recommends openssl ca-certificates && if [ "$APP" = audio-worker ]; then apt-get install -y --no-install-recommends ffmpeg; fi && rm -rf /var/lib/apt/lists/*
+RUN rm -rf /usr/local/lib/node_modules/npm && rm -f /usr/local/bin/npm /usr/local/bin/npx
+ENV NODE_ENV=production NODE_OPTIONS=--max-old-space-size=512
+WORKDIR /app
+COPY --from=package --chown=node:node /output ./
+COPY --from=build /usr/local/bin/infosound-parser /usr/local/bin/infosound-parser
+COPY --from=build /usr/local/bin/infosound-image-parser /usr/local/bin/infosound-image-parser
+USER node
+CMD ["node", "dist/main.js"]
+
+# Frozen sentence-embedding model for the recommendation batch jobs (tools image only).
+# Pinned Hugging Face commit; BuildKit verifies every file against its sha256 at build time.
+FROM ${NODE_IMAGE} AS reco-model
+ARG RECO_MODEL_REVISION=761b726dd34fb83930e26aab4e9ac3899aa1fa78
+ADD --chmod=0444 --checksum=sha256:cb99455288675345e1a4f411438d5d0adbba5fbd3a67ea4fb03c015433b996c1 https://huggingface.co/Xenova/multilingual-e5-small/resolve/${RECO_MODEL_REVISION}/config.json /opt/reco-models/Xenova/multilingual-e5-small/config.json
+ADD --chmod=0444 --checksum=sha256:0b44a9d7b51c3c62626640cda0e2c2f70fdacdc25bbbd68038369d14ebdf4c39 https://huggingface.co/Xenova/multilingual-e5-small/resolve/${RECO_MODEL_REVISION}/tokenizer.json /opt/reco-models/Xenova/multilingual-e5-small/tokenizer.json
+ADD --chmod=0444 --checksum=sha256:a1d6bc8734a6f635dc158508bef000f8e2e5a759c7d92f984b2c86e5ff53425b https://huggingface.co/Xenova/multilingual-e5-small/resolve/${RECO_MODEL_REVISION}/tokenizer_config.json /opt/reco-models/Xenova/multilingual-e5-small/tokenizer_config.json
+ADD --chmod=0444 --checksum=sha256:d05497f1da52c5e09554c0cd874037a083e1dc1b9cfd48034d1c717f1afc07a7 https://huggingface.co/Xenova/multilingual-e5-small/resolve/${RECO_MODEL_REVISION}/special_tokens_map.json /opt/reco-models/Xenova/multilingual-e5-small/special_tokens_map.json
+ADD --chmod=0444 --checksum=sha256:59d175f15264115f18c698d76e443b5d49fc6c8c599911c421405ef4f236e87d https://huggingface.co/Xenova/multilingual-e5-small/resolve/${RECO_MODEL_REVISION}/quant_config.json /opt/reco-models/Xenova/multilingual-e5-small/quant_config.json
+ADD --chmod=0444 --checksum=sha256:f80102d3f2a1229f387d3c81909990d8945513e347b0eab049f7de3c6f98c193 https://huggingface.co/Xenova/multilingual-e5-small/resolve/${RECO_MODEL_REVISION}/onnx/model_quantized.onnx /opt/reco-models/Xenova/multilingual-e5-small/onnx/model_quantized.onnx
+# ADD --chmod also applies to the created parent directories; make them traversable for the non-root tools user.
+RUN find /opt/reco-models -type d -exec chmod 0555 {} + && find /opt/reco-models -type f -exec chmod 0444 {} +
+
+FROM build AS tools
+COPY apps/web/package.json ./apps/web/package.json
+RUN --mount=type=cache,id=infosound-pnpm,target=/pnpm/store pnpm install --frozen-lockfile --filter @infosound/web
+COPY apps/web ./apps/web
+COPY --from=reco-model /opt/reco-models /opt/reco-models
+ENV RECO_MODEL_DIR=/opt/reco-models RECO_MODEL_ID=Xenova/multilingual-e5-small RECO_MODEL_REVISION=761b726dd34fb83930e26aab4e9ac3899aa1fa78 RECO_MODEL_DTYPE=q8
+COPY --from=recommendation_ai batch /repo/recommendation-ai/batch
+RUN pnpm --filter @infosound/recommendation-batch build
+USER node
+RUN ffmpeg -hide_banner -version >/dev/null && test -r /opt/reco-models/Xenova/multilingual-e5-small/onnx/model_quantized.onnx && test -r /opt/reco-models/Xenova/multilingual-e5-small/tokenizer.json
+CMD ["pnpm", "typecheck"]

@@ -1,0 +1,76 @@
+# Isolated AI-recommendation demo (recommendation-ai/docs/DESIGN.md sections 0 and 6).
+# Layer AFTER compose.yaml + compose.lab.yaml + compose.local.yaml and always run with
+#   --project-name infosound-demo --env-file images.env --env-file ../.runtime-private/reco-demo/runtime.env
+# Use recommendation-ai/demo/*.ps1 instead of calling Compose by hand.
+# - Every InfoSound image is retagged :reco so the real infosound/*:local images are never rebuilt or overwritten.
+# - Named volumes are explicitly prefixed infosound-demo_ (fresh, synthetic data only).
+# - Published ports come from the demo runtime.env (alternate 4443/10943 by default; 3443/9443 with -StandardPorts).
+name: infosound-demo
+services:
+  init-data:
+    image: infosound/tools:reco
+    pull_policy: never
+  gateway:
+    image: infosound/gateway:reco
+    pull_policy: never
+    ports: !override
+      - '127.0.0.1:${APP_HTTP_PORT:?Use recommendation-ai/demo/start-demo.ps1}:8080'
+      - '127.0.0.1:${APP_HTTPS_PORT:?Use recommendation-ai/demo/start-demo.ps1}:8443'
+      - '127.0.0.1:${MEDIA_HTTPS_PORT:?Use recommendation-ai/demo/start-demo.ps1}:9443'
+  web:
+    image: infosound/web:reco
+    pull_policy: never
+  api:
+    image: infosound/api:reco
+    pull_policy: never
+    environment:
+      # Explain endpoint (scores/features for the caller's own user) is enabled for the demo API only.
+      RECO_EXPLAIN_ENABLED: 'true'
+  audio-worker:
+    image: infosound/audio-worker:reco
+    pull_policy: never
+  background-worker:
+    image: infosound/background-worker:reco
+    pull_policy: never
+  postgres:
+    image: infosound/postgres:reco
+    pull_policy: never
+    networks: !override
+      database:
+        # Demo DB URLs use this host, which the batch demo guard requires ("demo" in host) and which
+        # does not exist on the real stack's networks.
+        aliases: [infosound-demo-postgres]
+    volumes: !override
+      - postgres-data:/var/lib/postgresql/data
+      # LF copy rendered by start-demo.ps1: the CRLF working-tree copy breaks bash on a fresh volume.
+      - type: bind
+        source: ${RECO_DEMO_ROLES_SCRIPT:?Use recommendation-ai/demo/start-demo.ps1}
+        target: /docker-entrypoint-initdb.d/01-roles.sh
+        read_only: true
+  tools:
+    image: infosound/tools:reco
+    pull_policy: never
+    mem_limit: 3072m
+    cpus: 2.0
+    environment:
+      RECO_DEMO: '1'
+      DATABASE_URL_FILE: /run/secrets/database_url_owner
+      S3_BOOTSTRAP_ACCESS_KEY_FILE: /run/secrets/s3_bootstrap_access_key
+      S3_BOOTSTRAP_SECRET_KEY_FILE: /run/secrets/s3_bootstrap_secret_key
+      S3_API_ACCESS_KEY_FILE: /run/secrets/s3_api_access_key
+      S3_API_SECRET_KEY_FILE: /run/secrets/s3_api_secret_key
+      S3_WORKER_ACCESS_KEY_FILE: /run/secrets/s3_worker_access_key
+      S3_WORKER_SECRET_KEY_FILE: /run/secrets/s3_worker_secret_key
+      S3_READ_ACCESS_KEY_FILE: /run/secrets/s3_read_access_key
+      S3_READ_SECRET_KEY_FILE: /run/secrets/s3_read_secret_key
+      S3_UPLOAD_ACCESS_KEY_FILE: /run/secrets/s3_upload_access_key
+      S3_UPLOAD_SECRET_KEY_FILE: /run/secrets/s3_upload_secret_key
+    secrets: !override [database_url_owner, redis_password, ca.crt, s3_bootstrap_access_key, s3_bootstrap_secret_key, s3_api_access_key, s3_api_secret_key, s3_worker_access_key, s3_worker_secret_key, s3_read_access_key, s3_read_secret_key, s3_upload_access_key, s3_upload_secret_key]
+    volumes:
+      # Batch evaluator writes recommendation-ai/reports/ (container root FS stays read-only).
+      - ../recommendation-ai/reports:/repo/recommendation-ai/reports
+volumes:
+  postgres-data: {name: infosound-demo_postgres-data}
+  redis-data: {name: infosound-demo_redis-data}
+  storage-data: {name: infosound-demo_storage-data}
+  audio-tmp: {name: infosound-demo_audio-tmp}
